@@ -22,8 +22,11 @@ class PageShopController extends Controller
         ->leftJoin('detail_transaksi as tx', function($join) {
             $join->leftjoin('transaksi as ti', 'ti.id_transaksi','tx.id_transaksi')->on('ta.id_barang','tx.id_barang')->where('ti.id_jenis_transaksi',1)->where('ti.id_status','!=',1);
           })
-        ->select(DB::RAW('sum(ty.qty) as stock, ta.*, tb.name, tc.nama_kategori, sum(tx.qty) terjual'))
-        ->groupby('ta.id_barang');
+        ->select(DB::RAW('sum(ty.qty) as stock, ta.*, tb.name, tc.nama_kategori, sum(tx.qty) terjual'));
+        if($request->id_kategori != 0){
+            $res->where('ta.id_kategori', $request->id_kategori);
+        }
+        $res->groupby('ta.id_barang');
         if($request->sorting==2){
             $res->orderByRaw('sum(tx.qty) DESC');
         }else if($request->sorting==3){
@@ -31,6 +34,7 @@ class PageShopController extends Controller
         }else{
             $res->orderby('ta.created_at', 'desc');
         }
+
         $res->get();
         $data = $res->paginate(8);
         // dd($data['total']);
