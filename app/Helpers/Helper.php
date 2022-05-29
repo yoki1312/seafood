@@ -8,13 +8,13 @@ function getProduk(){
     $data  =  DB::table('master_barang as ta')
     ->leftjoin('admins as tb', 'tb.id', 'ta.id_supplier')
     ->leftjoin('master_kategori_seafood as tc', 'tc.id_kategori_seafood','ta.id_kategori')
-    ->leftJoin('detail_transaksi as ty', function($join) {
-        $join->leftjoin('transaksi as tk', 'tk.id_transaksi','ty.id_transaksi')->on('ta.id_barang','ty.id_barang')->where('tk.id_status','!=',1);
-      })
+    ->leftJoin(DB::raw('(select sum(ta.qty) as qty_stock, ta.id_barang from detail_transaksi ta INNER JOIN transaksi tc on tc.id_transaksi = ta.id_transaksi where tc.id_status in (0,2) GROUP BY ta.id_barang) tz'), function($join){
+      $join->on('tz.id_barang' ,'=' ,'ta.id_barang');
+  })
     ->leftJoin('detail_transaksi as tx', function($join) {
         $join->leftjoin('transaksi as ti', 'ti.id_transaksi','tx.id_transaksi')->on('ta.id_barang','tx.id_barang')->where('ti.id_jenis_transaksi',1)->where('ti.id_status','!=',1);
       })
-    ->select(DB::RAW('sum(ty.qty) as stock, ta.*, tb.name as nama_toko, tc.nama_kategori, sum(tx.qty) terjual'))
+    ->select(DB::RAW('tz.qty_stock as stock, ta.*, tb.name as nama_toko, tc.nama_kategori, sum(tx.qty) terjual'))
     ->groupby('ta.id_barang')
     ->orderByRaw('sum(tx.qty) DESC')
     ->limit(8)
