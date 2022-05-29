@@ -32,6 +32,9 @@ Route::get('/', function () {
 Route::get('login/supplier', function () {
     return view('admin.login_supplier');
 });
+Route::get('login/pembeli', function () {
+    return view('front.login');
+});
 Route::get('register/supplier', function () {
     return view('admin.registrasi_supplier');
 });
@@ -53,7 +56,9 @@ Route::controller(PesananController::class)->group(function(){
     Route::get('pesanan/riwayat', 'riwayatPesanan')->name('riwayatPesanan.index');
     Route::post('pesanan/destroy/{id_pesanan}', 'destroy')->name('pesanan.destroy');
     Route::get('pesanan/detail/{id_pesanan}', 'show')->name('pesanan.detail');
+    Route::post('pesanan/destroyTransaksi/{id_pesanan}', 'destroyTransaksi')->name('pesanan.destroyTransaksi');
     Route::post('pesanan/proses/cekout', 'store')->name('pesanan.store');
+    Route::post('pesanan/update', 'update')->name('pesanan.update');
 
 });
 Route::controller(PageShopController::class)->group(function(){

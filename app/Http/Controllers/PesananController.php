@@ -19,9 +19,14 @@ class PesananController extends Controller
         if($request->ajax()){
             $data = DB::table('keranjang_temporary as ta')
             ->leftjoin('master_barang as tb', 'tb.id_barang','ta.id_barang')
-            ->leftjoin('detail_transaksi as tc','tc.id_barang','tb.id_barang')
+            ->leftJoin('detail_transaksi as tc', function($join) {
+                $join->leftjoin('transaksi as tk', 'tk.id_transaksi','tc.id_transaksi')->on('ta.id_barang','tc.id_barang')->where('tk.id_status','!=',1);
+              })
+            ->leftJoin('detail_transaksi as tx', function($join) {
+                $join->leftjoin('transaksi as ti', 'ti.id_transaksi','tx.id_transaksi')->on('ta.id_barang','tx.id_barang')->where('ti.id_jenis_transaksi',1)->where('ti.id_status','!=',1);
+              })
             ->leftjoin('admins as td','td.id','tb.id_supplier')
-            ->select(DB::raw('sum(ta.qty) as qty, tb.*, sum(tc.qty) sisa_stock, td.name as nama_toko, ta.id_temporary'))
+            ->select(DB::raw('ta.qty, tb.*, sum(tc.qty) sisa_stock, td.name as nama_toko, ta.id_temporary'))
             ->where('ta.id_user', Auth::user()->id)
             ->groupBy('ta.id_barang')
             ->get();
@@ -49,7 +54,8 @@ class PesananController extends Controller
             $data = DB::table('transaksi as ta')
             ->leftjoin('detail_transaksi as tb','tb.id_transaksi','ta.id_transaksi')
             ->leftjoin('master_status_pembelian as tc', 'tc.id_status_pembelian', 'ta.id_status')
-            ->select(DB::raw('ta.*,  sum(tb.qty) total_barang, tc.nama_status'))
+            ->leftjoin('data_transaksi as td', 'td.id_transaksi', 'ta.id_transaksi')
+            ->select(DB::raw('ta.*,  sum(tb.qty) total_barang, tc.nama_status, td.file'))
             ->where('ta.id_user_pembeli', Auth::user()->id)
             ->groupBy('ta.id_transaksi')
             ->get();
@@ -57,8 +63,14 @@ class PesananController extends Controller
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
      
-                           $btn = ' <a href="'. url('pesanan/detail/' . $row->id_transaksi) .'"  class=" btn btn-danger btn-sm btn-hapus-pesanan">Batal Pesanan</a>';
-                           $btn .= ' <a href="'. url('pesanan/detail/' . $row->id_transaksi) .'"  class=" btn btn-success btn-cekout btn-sm">Bayar Pesanan</a>';
+                        $btn ='';
+                        if($row->id_status == 1){
+                               $btn .= ' <button type="button" data-id="'. $row->id_transaksi .'" class=" btn btn-danger btn-sm btn-hapus-pesanan">Batal Pesanan</button>';
+                               $btn .= ' <a href="'. url('pesanan/detail/' . $row->id_transaksi) .'"  class=" btn btn-info btn-cekout btn-sm">Bayar Pesanan</a>';
+                        }else{
+                            $btn .= ' <a href="'. url('pesanan/detail/' . $row->id_transaksi) .'"  class=" btn btn-success btn-cekout btn-sm">Detail Pesanan</a>';
+
+                        }
                         //    $btn .= ' <a href="javascript:void(0)" class=" btn btn-info btn-un-cekout btn-sm" style="display:none">Batal</a>';
     
                             return $btn;
@@ -102,6 +114,12 @@ class PesananController extends Controller
             DB::table('transaksi')->insert($transaksi);
             $id_transaksi = DB::getPdo()->lastInsertId();
             
+            DB::table('data_transaksi')->insert([
+                'id_transaksi' => $id_transaksi,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
+            ]);
+
             $order = $request->detail_transaksi;
             foreach ($order as $key => $value) {
                 $r = (object) $value;
@@ -128,7 +146,7 @@ class PesananController extends Controller
 
             DB::commit();
             toastr()->success('Tambah Barang Berhasil', 'Berhasil');
-            return redirect()->route('pesanan.index');
+            return redirect('pesanan/detail/'.$id_transaksi);
             // all good
         } catch (\Exception $e) {
             DB::rollback();
@@ -152,7 +170,9 @@ class PesananController extends Controller
         ->select('ta.*','tb.nama_barang')
         ->where('ta.id_transaksi',$id)
         ->get();
-        return view('front.detail-pesanan', compact('data'));
+        $header = DB::table('transaksi')->where('id_transaksi', $id)->first();
+        $dataTransaksi = DB::table('data_transaksi')->where('id_transaksi', $id)->first();
+        return view('front.detail-pesanan', compact('data','header','dataTransaksi'));
     }
 
     /**
@@ -170,12 +190,37 @@ class PesananController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  int  $id 
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $transaksi = DB::table('transaksi')->where('id_transaksi', $request->id_transaksi)->first();
+        $datatransaksi = DB::table('data_transaksi')->where('id_transaksi', $request->id_transaksi)->first();
+        
+        $fileName = $datatransaksi->file;
+        if($request->file('file')){
+            $r = $request->file('file');
+            $fileName = 'pembayaran-'.time()."_". $transaksi->kode_transaksi;
+            $r->move(public_path().'/file-pembayaran', $fileName);
+
+        }
+
+        DB::table('transaksi')->where('id_transaksi', $request->id_transaksi)->update([
+            'id_status' => 3
+        ]);
+
+        DB::table('data_transaksi')->where('id_transaksi', $request->id_transaksi)->update([
+            'nama' => $request->nama_depan .' '. $request->nama_belakang,
+            'kota' => $request->kota,
+            'email' => $request->email,
+            'alamat_lengkap' => $request->alamat_lengkap,
+            'catatan' => $request->catatan,
+            'nomor_hp' => $request->nomor_hp,
+            'file'  => $fileName
+        ]);
+        return view('front.cekout');
+        // dd($request->all());
     }
 
     /**
@@ -187,6 +232,17 @@ class PesananController extends Controller
     public function destroy($id)
     {
         DB::table('keranjang_temporary')->where('id_temporary', $id)->delete();
+        return response()->json(
+            [
+              'success' => true,
+              'message' => 'Data inserted successfully'
+            ]
+       );
+    }
+    public function destroyTransaksi($id)
+    {
+        DB::table('transaksi')->where('id_transaksi', $id)->delete();
+        DB::table('detail_transaksi')->where('id_transaksi', $id)->delete();
         return response()->json(
             [
               'success' => true,
