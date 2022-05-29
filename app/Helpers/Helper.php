@@ -12,7 +12,7 @@ function getProduk(){
       $join->on('tz.id_barang' ,'=' ,'ta.id_barang');
   })
     ->leftJoin('detail_transaksi as tx', function($join) {
-        $join->leftjoin('transaksi as ti', 'ti.id_transaksi','tx.id_transaksi')->on('ta.id_barang','tx.id_barang')->where('ti.id_jenis_transaksi',1)->where('ti.id_status','!=',1);
+        $join->leftjoin('transaksi as ti', 'ti.id_transaksi','tx.id_transaksi')->on('ta.id_barang','tx.id_barang')->where('ti.id_jenis_transaksi',1)->whereIn('ti.id_status',[0,2]);
       })
     ->select(DB::RAW('tz.qty_stock as stock, ta.*, tb.name as nama_toko, tc.nama_kategori, sum(tx.qty) terjual'))
     ->groupby('ta.id_barang')
