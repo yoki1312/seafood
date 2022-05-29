@@ -24,7 +24,8 @@
     <link rel="stylesheet" href="{{ asset('assetFront/css/style.css') }}" type="text/css">
     <link rel="stylesheet" href="{{ asset('summernote/summernote-bs4.min.css') }}" type="text/css">
     <link rel="stylesheet" href="{{ asset('assetAdmin/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assetAdmin/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
+    <link rel="stylesheet"
+        href="{{ asset('assetAdmin/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assetAdmin/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
 
     <meta name="csrf-token" content="{{ csrf_token() }}" />
@@ -53,28 +54,31 @@
             <div class="header__cart__price">item: <span>$150.00</span></div>
         </div>
         <div class="humberger__menu__widget">
-            <!-- <div class="header__top__right__language">
-                <img src="{{ asset('assetFront/img/language.png') }}" alt="">
-                <div>English</div>
-                <span class="arrow_carrot-down"></span>
-                <ul>
-                    <li><a href="#">Spanis</a></li>
-                    <li><a href="#">English</a></li>
-                </ul>
-            </div> -->
-            <div class="header__top__right__auth">
-                @if(isset(Auth::user()->id ))
-                <a href="#"><i class="fa fa-user"></i> {{ Auth::user()->name }}</a>
+        <div class="header__top__right__language">
+                                @if(isset(Auth::user()->id ))
+                                <i class="fa fa-user"></i>
+                                <div>{{ Auth::user()->name }}</div>
+                                <span class="arrow_carrot-down"></span>
+                                <ul>
+                                    <li><a href="#">Edit Profil</a></li>
+                                    <li>  <a class="dropdown-item" href="{{ route('logout') }}"
+                                       onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                        {{ __('Logout') }}
+                                    </a></li>
+                                </ul>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                        @csrf
+                                    </form>
+                                @else
+                                <a href="{{ url('login/pembeli') }}"><i class="fa fa-user"></i> Login</a>
 
-                @else
-                <a href="#"><i class="fa fa-user"></i> Login</a>
-
-                @endif
-            </div>
+                                @endif
+                            </div>
         </div>
         <nav class="humberger__menu__nav mobile-menu">
             <ul>
-                <li ><a href="{{ url('seafood') }}">Home</a></li>
+                <li><a href="{{ url('seafood') }}">Home</a></li>
                 <li><a href="{{ route('shop.index') }}">Shop</a></li>
                 <li><a href="{{ route('shop.index') }}">Keranjang</a></li>
                 <li><a href="#">Pages</a>
@@ -126,24 +130,28 @@
                                 <a href="#"><i class="fa fa-linkedin"></i></a>
                                 <a href="#"><i class="fa fa-pinterest-p"></i></a> -->
                             </div>
-                            <!-- <div class="header__top__right__language">
-                                <img src="{{ asset('assetFront/img/language.png') }}" alt="">
-                                <div>English</div>
+                            <div class="header__top__right__language">
+                                @if(isset(Auth::user()->id ))
+                                <i class="fa fa-user"></i>
+                                <div>{{ Auth::user()->name }}</div>
                                 <span class="arrow_carrot-down"></span>
                                 <ul>
-                                    <li><a href="#">Spanis</a></li>
-                                    <li><a href="#">English</a></li>
+                                    <li><a href="#">Edit Profil</a></li>
+                                    <li>  <a class="dropdown-item" href="{{ route('logout') }}"
+                                       onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                        {{ __('Logout') }}
+                                    </a></li>
                                 </ul>
-                            </div> -->
-                            <div class="header__top__right__auth">
-                                @if(isset(Auth::user()->id ))
-                                <a href="#"><i class="fa fa-user"></i> {{ Auth::user()->name }}</a>
-
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                        @csrf
+                                    </form>
                                 @else
-                                <a href="#"><i class="fa fa-user"></i> Login</a>
+                                <a href="{{ url('login/pembeli') }}"><i class="fa fa-user"></i> Login</a>
 
                                 @endif
                             </div>
+                          
                         </div>
                     </div>
                 </div>
@@ -176,7 +184,9 @@
                     <div class="header__cart">
                         <ul>
                             <!-- <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li> -->
-                            <li><a href="#"><i class="fa fa-shopping-bag"></i> <?= isset(Auth::user()->id) ? '<span class="dt-krs">'. getKeranjang().'</span>' : '' ?> </a></li>
+                            <li><a href="#"><i class="fa fa-shopping-bag"></i>
+                                    <?= isset(Auth::user()->id) ? '<span class="dt-krs">'. getKeranjang().'</span>' : '' ?>
+                                </a></li>
                         </ul>
                         <!-- <div class="header__cart__price">item: <span>$150.00</span></div> -->
                     </div>
@@ -201,7 +211,7 @@
                         </div>
                         <ul
                             style="display: none;position: absolute; left: 0; top: 46px; width: 100%; z-index: 9; background: #ffffff;">
-                           @foreach(sliderKategori() as $l)
+                            @foreach(sliderKategori() as $l)
                             <li><a href="{{ 's' }}">{{ $l->nama_kategori }}</a></li>
                             @endforeach
                         </ul>
@@ -211,7 +221,7 @@
                     <div class="hero__search">
                         <div class="hero__search__form">
                             <form action="#">
-                                
+
                                 <input type="text" placeholder="What do yo u need?">
                                 <button type="submit" class="site-btn">SEARCH</button>
                             </form>
@@ -341,20 +351,21 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-            $(document).on('click','.header__menu ul li', function(){
+            $(document).on('click', '.header__menu ul li', function () {
                 localStorage.setItem("linkActive", $(this).attr('class'));
             })
             var active = localStorage.getItem("linkActive");
-            $('.'+active).addClass('active')
-           
+            $('.' + active).addClass('active')
+
         })
-        function renderRp(nilai,decimal){
-           return accounting.formatNumber(nilai, decimal, " ");
+
+        function renderRp(nilai, decimal) {
+            return accounting.formatNumber(nilai, decimal, " ");
         }
         var id_user = $('meta[name="id_user"]').attr('content');
 
     </script>
-    
+
     @yield('js')
 
 

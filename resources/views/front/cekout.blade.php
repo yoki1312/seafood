@@ -83,7 +83,14 @@
                     data: 'nama_status',
                     className: 'text-center',
                     render: function (meta, data, row) {
-                        return '<span class="badge badge-info">' + row.nama_status +  '</span>';
+                        var elm =''; 
+                        if(row.id_status == 1){
+                            elm += '<span class="badge badge-info">' + row.nama_status + '</span>';
+                        }
+                        if(row.id_status == 2){
+                            elm += '<span class="badge badge-success">' + row.nama_status + '</span>';
+                        }
+                        return elm
                     }
                 },
                 {

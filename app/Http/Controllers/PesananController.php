@@ -58,7 +58,12 @@ class PesananController extends Controller
                     ->addColumn('action', function($row){
      
                            $btn = ' <a href="'. url('pesanan/detail/' . $row->id_transaksi) .'"  class=" btn btn-danger btn-sm btn-hapus-pesanan">Batal Pesanan</a>';
-                           $btn .= ' <a href="'. url('pesanan/detail/' . $row->id_transaksi) .'"  class=" btn btn-success btn-cekout btn-sm">Bayar Pesanan</a>';
+                           if($row->id_status == 1){
+                               $btn .= ' <a href="'. url('pesanan/detail/' . $row->id_transaksi) .'"  class=" btn btn-info btn-cekout btn-sm">Bayar Pesanan</a>';
+                           }
+                           if($row->id_status == 2){
+                               $btn .= ' <a href="'. url('pesanan/detail/' . $row->id_transaksi) .'"  class=" btn btn-success btn-cekout btn-sm">Detail Pesanan</a>';
+                           }
                         //    $btn .= ' <a href="javascript:void(0)" class=" btn btn-info btn-un-cekout btn-sm" style="display:none">Batal</a>';
     
                             return $btn;
@@ -102,6 +107,12 @@ class PesananController extends Controller
             DB::table('transaksi')->insert($transaksi);
             $id_transaksi = DB::getPdo()->lastInsertId();
             
+            DB::table('data_transaksi')->insert([
+                'id_transaksi' => $id_transaksi,
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
+            ]);
+
             $order = $request->detail_transaksi;
             foreach ($order as $key => $value) {
                 $r = (object) $value;
@@ -128,7 +139,7 @@ class PesananController extends Controller
 
             DB::commit();
             toastr()->success('Tambah Barang Berhasil', 'Berhasil');
-            return redirect()->route('pesanan.index');
+            return redirect('pesanan/detail/'.$id_transaksi);
             // all good
         } catch (\Exception $e) {
             DB::rollback();
@@ -152,7 +163,9 @@ class PesananController extends Controller
         ->select('ta.*','tb.nama_barang')
         ->where('ta.id_transaksi',$id)
         ->get();
-        return view('front.detail-pesanan', compact('data'));
+        $header = DB::table('transaksi')->where('id_transaksi', $id)->first();
+        $dataTransaksi = DB::table('data_transaksi')->where('id_transaksi', $id)->first();
+        return view('front.detail-pesanan', compact('data','header','dataTransaksi'));
     }
 
     /**
@@ -170,12 +183,33 @@ class PesananController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  int  $id 
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $transaksi = DB::table('transaksi')->where('id_transaksi', $request->id_transaksi)->first();
+        $datatransaksi = DB::table('data_transaksi')->where('id_transaksi', $request->id_transaksi)->first();
+        
+        $fileName = $datatransaksi->file;
+        if($request->file('file')){
+            $r = $request->file('file');
+            $fileName = 'pembayaran-'.time()."_". $transaksi->kode_transaksi;
+            $r->move(public_path().'/file-pembayaran', $fileName);
+
+        }
+
+        DB::table('data_transaksi')->where('id_transaksi', $request->id_transaksi)->update([
+            'nama' => $request->nama_depan .' '. $request->nama_belakang,
+            'kota' => $request->kota,
+            'email' => $request->email,
+            'alamat_lengkap' => $request->alamat_lengkap,
+            'catatan' => $request->catatan,
+            'nomor_hp' => $request->nomor_hp,
+            'file'  => $fileName
+        ]);
+        return view('front.cekout');
+        // dd($request->all());
     }
 
     /**
