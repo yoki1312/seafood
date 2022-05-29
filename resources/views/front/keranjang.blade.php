@@ -16,35 +16,35 @@
     </div>
 </section>
 <section class="shoping-cart spad" style="padding-top:40px !important">
-<form action="{{ route('pesanan.store') }}" method="post" enctype="multipart/form-data">
-    @csrf
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="table-responsive">
-                    <table class="table table-sm tb-barang">
-                        <thead class="table-primary">
-                            <tr>
-                                <th class="text-center">Products</th>
-                                <th class="text-center">Toko</th>
-                                <th class="text-center">Nama Barang</th>
-                                <th class="text-center">Price</th>
-                                <th class="text-center">Sisa Stock</th>
-                                <th class="text-center" style="width: 100px !important;">Quantity</th>
-                                <th class="text-center" style="width: 100px !important;">Total</th>
-                                <th class="text-center">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+    <form action="{{ route('pesanan.store') }}" method="post" enctype="multipart/form-data">
+        @csrf
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="table-responsive">
+                        <table class="table table-sm tb-barang">
+                            <thead class="table-primary">
+                                <tr>
+                                    <th class="text-center">Products</th>
+                                    <th class="text-center">Toko</th>
+                                    <th class="text-center">Nama Barang</th>
+                                    <th class="text-center">Price</th>
+                                    <th class="text-center">Sisa Stock</th>
+                                    <th class="text-center" style="width: 100px !important;">Quantity</th>
+                                    <th class="text-center" style="width: 100px !important;">Total</th>
+                                    <th class="text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
 
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </div>
 
-        </div>
-        <div class="row">
-            <!-- <div class="col-lg-6">
+            </div>
+            <div class="row">
+                <!-- <div class="col-lg-6">
                 <div class="shoping__continue">
                     <div class="shoping__discount">
                         <h5>Discount Codes</h5>
@@ -55,19 +55,20 @@
                     </div>
                 </div>
             </div> -->
-            <div class="col-lg-6">
-                <div class="shoping__checkout">
-                    <h5>Cart Total</h5>
-                    <ul>
-                        <li>Jumlah Qty Pesanan <span class="total-qty-pesanan">0</span></li>
-                        <li>Total Pembayaran <span class="total-pembayaran-pesanan">0</span></li>
-                    </ul>
-                    <button type="submit" class="btn btn-sm btn-success" style="width: 100%;">PROCEED TO CHECKOUT</button>
+                <div class="col-lg-6">
+                    <div class="shoping__checkout">
+                        <h5>Cart Total</h5>
+                        <ul>
+                            <li>Jumlah Qty Pesanan <span class="total-qty-pesanan">0</span></li>
+                            <li>Total Pembayaran <span class="total-pembayaran-pesanan">0</span></li>
+                        </ul>
+                        <button type="submit" class="btn btn-sm btn-success" style="width: 100%;">PROCEED TO
+                            CHECKOUT</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</form>
+    </form>
 </section>
 
 @endsection
@@ -120,12 +121,24 @@
                     className: 'text-right',
                     render: function (data, type, row, meta) {
                         var elm = '';
-                        elm += '<input name="detail_transaksi['+ meta.row +'][status_cekout]" type="hidden" value="0" class="form-control form-control-sm text-right id-status" />';
-                        elm += '<input name="detail_transaksi['+ meta.row +'][id_temporary]" type="hidden" value="' + row.id_temporary + '" class="form-control form-control-sm text-right" />';
-                        elm += '<input name="detail_transaksi['+ meta.row +'][id_barang]" type="hidden" value="' + row.id_barang + '" class="form-control form-control-sm text-right" />';
-                        elm += '<input name="detail_transaksi['+ meta.row +'][stock]" type="hidden" value="' + parseInt(row.sisa_stock) + '" class="form-control form-control-sm text-right sisa-stock" />';
-                        elm += '<input name="detail_transaksi['+ meta.row +'][harga_barang]" type="hidden" value="' + row.harga_barang + '" class="form-control form-control-sm text-right harga-barang" />';
-                        elm += '<input name="detail_transaksi['+ meta.row +'][qty_pesanan]" ' + (row.sisa_stock <= 0 ? 'readonly' : '') + ' type="number" value="' + parseInt(row.qty) + '" class="form-control form-control-sm text-right qty-pesanan" />';
+                        elm += '<input name="detail_transaksi[' + meta.row +
+                            '][status_cekout]" type="hidden" value="0" class="form-control form-control-sm text-right id-status" />';
+                        elm += '<input name="detail_transaksi[' + meta.row +
+                            '][id_temporary]" type="hidden" value="' + row.id_temporary +
+                            '" class="form-control form-control-sm text-right" />';
+                        elm += '<input name="detail_transaksi[' + meta.row +
+                            '][id_barang]" type="hidden" value="' + row.id_barang +
+                            '" class="form-control form-control-sm text-right" />';
+                        elm += '<input name="detail_transaksi[' + meta.row +
+                            '][stock]" type="hidden" value="' + parseInt(row.sisa_stock) +
+                            '" class="form-control form-control-sm text-right sisa-stock" />';
+                        elm += '<input name="detail_transaksi[' + meta.row +
+                            '][harga_barang]" type="hidden" value="' + row.harga_barang +
+                            '" class="form-control form-control-sm text-right harga-barang" />';
+                        elm += '<input name="detail_transaksi[' + meta.row +
+                            '][qty_pesanan]" ' + (row.sisa_stock <= 0 ? 'readonly' : '') +
+                            ' type="number" value="' + parseInt(row.qty) +
+                            '" class="form-control form-control-sm text-right qty-pesanan" />';
                         return elm
                     }
                 },
@@ -133,7 +146,10 @@
                     data: 'qty',
                     className: 'text-right',
                     render: function (data, type, row, meta) {
-                        return '<input name="detail_transaksi['+ meta.row +'][total_pesanan]" readonly type="text" value="' + renderRp(parseFloat(row.qty * row.harga_barang), 0) + '" class="form-control form-control-sm text-right total-pesanan" />';
+                        return '<input name="detail_transaksi[' + meta.row +
+                            '][total_pesanan]" readonly type="text" value="' + renderRp(
+                                parseFloat(row.qty * row.harga_barang), 0) +
+                            '" class="form-control form-control-sm text-right total-pesanan" />';
                     }
                 },
                 {
@@ -152,12 +168,12 @@
             var data = table.row($(this).closest('tr')).data();
             var elm = $(this).closest('tr');
             let qty = parseFloat(elm.find('.qty-pesanan').val());
-            
+
             elm.find('.btn-un-cekout').show()
             $(this).hide()
-            
+
             totalQtyPesanan = parseFloat(totalQtyPesanan + qty);
-            
+
             $('.total-qty-pesanan').text(totalQtyPesanan + ' barang');
 
             var harga = parseFloat(qty * data.harga_barang);
@@ -166,31 +182,31 @@
 
             elm.find('.qty-pesanan').attr('readonly', true)
             elm.find('.id-status').val(1)
-            
+
         });
         $(document).on('click', '.btn-un-cekout', function () {
             var data = table.row($(this).closest('tr')).data();
             var elm = $(this).closest('tr');
             let qty = parseFloat(elm.find('.qty-pesanan').val());
-            
+
             $(this).hide()
             elm.find('.btn-cekout').show()
             totalQtyPesanan = parseFloat(totalQtyPesanan - qty);
             $('.total-qty-pesanan').text(totalQtyPesanan + ' barang');
-            
+
             var harga = parseFloat(qty * data.harga_barang);
             totalPembayaranPesanan = totalPembayaranPesanan - harga;
             $('.total-pembayaran-pesanan').text(renderRp(totalPembayaranPesanan));
             elm.find('.qty-pesanan').attr('readonly', false)
             elm.find('.id-status').val(0)
         });
-        
-        $(document).on('change','.qty-pesanan', function(){
+
+        $(document).on('change', '.qty-pesanan', function () {
             const elm = $(this).closest('tr');
             let qty = $(this).val();
             let harga = elm.find('.harga-barang').val();
             let sisa_stock = parseInt(elm.find('.sisa-stock').val());
-            if(qty > sisa_stock){
+            if (qty > sisa_stock) {
                 $(this).val('0');
                 elm.find('.total-pesanan').val('0')
                 return Swal.fire(
@@ -199,21 +215,34 @@
                     'warning'
                 );
             }
-            elm.find('.total-pesanan').val( renderRp(parseFloat(qty*harga),0))
+            elm.find('.total-pesanan').val(renderRp(parseFloat(qty * harga), 0))
         })
 
         $(document).on('click', '.btn-hapus-pesanan', function () {
             let id_pesanan = $(this).attr('data-id');
-            $.post("{{ url('/pesanan/destroy/') }}" + '/' + id_pesanan, function (data) {
-                if (data.success == true) {
-                    Swal.fire(
-                        'Berhasil!',
-                        'Pesanan berhasil dihapus.',
-                        'success'
-                    );
-                    table.ajax.reload(null,true)
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.post("{{ url('/pesanan/destroy/') }}" + '/' + id_pesanan, function (data) {
+                        if (data.success == true) {
+                            Swal.fire(
+                                'Berhasil!',
+                                'Pesanan berhasil dihapus.',
+                                'success'
+                            );
+                            table.ajax.reload(null, true)
+                        }
+                    });
                 }
-            });
+            })
+
         })
 
     })

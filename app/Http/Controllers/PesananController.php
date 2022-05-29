@@ -19,9 +19,14 @@ class PesananController extends Controller
         if($request->ajax()){
             $data = DB::table('keranjang_temporary as ta')
             ->leftjoin('master_barang as tb', 'tb.id_barang','ta.id_barang')
-            ->leftjoin('detail_transaksi as tc','tc.id_barang','tb.id_barang')
+            ->leftJoin('detail_transaksi as tc', function($join) {
+                $join->leftjoin('transaksi as tk', 'tk.id_transaksi','tc.id_transaksi')->on('ta.id_barang','tc.id_barang')->where('tk.id_status','!=',1);
+              })
+            ->leftJoin('detail_transaksi as tx', function($join) {
+                $join->leftjoin('transaksi as ti', 'ti.id_transaksi','tx.id_transaksi')->on('ta.id_barang','tx.id_barang')->where('ti.id_jenis_transaksi',1)->where('ti.id_status','!=',1);
+              })
             ->leftjoin('admins as td','td.id','tb.id_supplier')
-            ->select(DB::raw('sum(ta.qty) as qty, tb.*, sum(tc.qty) sisa_stock, td.name as nama_toko, ta.id_temporary'))
+            ->select(DB::raw('ta.qty, tb.*, sum(tc.qty) sisa_stock, td.name as nama_toko, ta.id_temporary'))
             ->where('ta.id_user', Auth::user()->id)
             ->groupBy('ta.id_barang')
             ->get();
@@ -49,7 +54,8 @@ class PesananController extends Controller
             $data = DB::table('transaksi as ta')
             ->leftjoin('detail_transaksi as tb','tb.id_transaksi','ta.id_transaksi')
             ->leftjoin('master_status_pembelian as tc', 'tc.id_status_pembelian', 'ta.id_status')
-            ->select(DB::raw('ta.*,  sum(tb.qty) total_barang, tc.nama_status'))
+            ->leftjoin('data_transaksi as td', 'td.id_transaksi', 'ta.id_transaksi')
+            ->select(DB::raw('ta.*,  sum(tb.qty) total_barang, tc.nama_status, td.file'))
             ->where('ta.id_user_pembeli', Auth::user()->id)
             ->groupBy('ta.id_transaksi')
             ->get();
@@ -57,13 +63,14 @@ class PesananController extends Controller
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
      
-                           $btn = ' <a href="'. url('pesanan/detail/' . $row->id_transaksi) .'"  class=" btn btn-danger btn-sm btn-hapus-pesanan">Batal Pesanan</a>';
-                           if($row->id_status == 1){
+                        $btn ='';
+                        if($row->id_status == 1){
+                               $btn .= ' <button type="button" data-id="'. $row->id_transaksi .'" class=" btn btn-danger btn-sm btn-hapus-pesanan">Batal Pesanan</button>';
                                $btn .= ' <a href="'. url('pesanan/detail/' . $row->id_transaksi) .'"  class=" btn btn-info btn-cekout btn-sm">Bayar Pesanan</a>';
-                           }
-                           if($row->id_status == 2){
-                               $btn .= ' <a href="'. url('pesanan/detail/' . $row->id_transaksi) .'"  class=" btn btn-success btn-cekout btn-sm">Detail Pesanan</a>';
-                           }
+                        }else{
+                            $btn .= ' <a href="'. url('pesanan/detail/' . $row->id_transaksi) .'"  class=" btn btn-success btn-cekout btn-sm">Detail Pesanan</a>';
+
+                        }
                         //    $btn .= ' <a href="javascript:void(0)" class=" btn btn-info btn-un-cekout btn-sm" style="display:none">Batal</a>';
     
                             return $btn;
@@ -199,6 +206,10 @@ class PesananController extends Controller
 
         }
 
+        DB::table('transaksi')->where('id_transaksi', $request->id_transaksi)->update([
+            'id_status' => 3
+        ]);
+
         DB::table('data_transaksi')->where('id_transaksi', $request->id_transaksi)->update([
             'nama' => $request->nama_depan .' '. $request->nama_belakang,
             'kota' => $request->kota,
@@ -221,6 +232,17 @@ class PesananController extends Controller
     public function destroy($id)
     {
         DB::table('keranjang_temporary')->where('id_temporary', $id)->delete();
+        return response()->json(
+            [
+              'success' => true,
+              'message' => 'Data inserted successfully'
+            ]
+       );
+    }
+    public function destroyTransaksi($id)
+    {
+        DB::table('transaksi')->where('id_transaksi', $id)->delete();
+        DB::table('detail_transaksi')->where('id_transaksi', $id)->delete();
         return response()->json(
             [
               'success' => true,

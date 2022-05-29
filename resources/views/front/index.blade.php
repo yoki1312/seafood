@@ -54,27 +54,26 @@
             <div class="header__cart__price">item: <span>$150.00</span></div>
         </div>
         <div class="humberger__menu__widget">
-        <div class="header__top__right__language">
-                                @if(isset(Auth::user()->id ))
-                                <i class="fa fa-user"></i>
-                                <div>{{ Auth::user()->name }}</div>
-                                <span class="arrow_carrot-down"></span>
-                                <ul>
-                                    <li><a href="#">Edit Profil</a></li>
-                                    <li>  <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
+            <div class="header__top__right__language">
+                @if(isset(Auth::user()->id ))
+                <i class="fa fa-user"></i>
+                <div>{{ Auth::user()->name }}</div>
+                <span class="arrow_carrot-down"></span>
+                <ul>
+                    <li><a href="#">Edit Profil</a></li>
+                    <li> <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a></li>
-                                </ul>
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
-                                @else
-                                <a href="{{ url('login/pembeli') }}"><i class="fa fa-user"></i> Login</a>
+                            {{ __('Logout') }}
+                        </a></li>
+                </ul>
+                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                    @csrf
+                </form>
+                @else
+                <a href="{{ url('login/pembeli') }}"><i class="fa fa-user"></i> Login</a>
 
-                                @endif
-                            </div>
+                @endif
+            </div>
         </div>
         <nav class="humberger__menu__nav mobile-menu">
             <ul>
@@ -137,21 +136,20 @@
                                 <span class="arrow_carrot-down"></span>
                                 <ul>
                                     <li><a href="#">Edit Profil</a></li>
-                                    <li>  <a class="dropdown-item" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
+                                    <li> <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a></li>
+                                            {{ __('Logout') }}
+                                        </a></li>
                                 </ul>
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                        @csrf
-                                    </form>
+                                    @csrf
+                                </form>
                                 @else
                                 <a href="{{ url('login/pembeli') }}"><i class="fa fa-user"></i> Login</a>
 
                                 @endif
                             </div>
-                          
+
                         </div>
                     </div>
                 </div>
@@ -169,10 +167,10 @@
                         <ul>
                             <li class="home-li"><a href="{{ url('seafood') }}">Home</a></li>
                             <li class="shop-li"><a href="{{ route('shop.index')}}">Produk</a></li>
-                            <li><a href="#">Pembelian</a>
+                            <li class="pembelian-li"><a href="#">Pembelian</a>
                                 <ul class="header__menu__dropdown">
-                                    <li><a href="{{ route('pesanan.index')}}">Keranjang Saya</a></li>
-                                    <li><a href="{{ route('riwayatPesanan.index') }}">Riwayat Pembelian</a></li>
+                                    <li class="pembelian-li"><a href="{{ route('pesanan.index')}}">Keranjang Saya</a></li>
+                                    <li class="pembelian-li"><a href="{{ route('riwayatPesanan.index') }}">Riwayat Pembelian</a></li>
                                 </ul>
                             </li>
                             <li><a href="./blog.html">Blog</a></li>

@@ -89,7 +89,7 @@
                                     @if(!empty($dataTransaksi->file))
                                     <a target="_blank" href={{ asset('file-pembayaran/'.$dataTransaksi->file)}} >Lihat File Pembayaran</a>
                                     @else
-                                    <input type="file" name="file" id="payment">
+                                    <input type="file" name="file" id="payment" require>
 
                                     @endif
                                 </div>
@@ -98,6 +98,11 @@
 
                                 @endif
                             </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 form-group">
+                            <a href="{{ route('riwayatPesanan.index') }}" class="btn btn-sm btn-danger">Back</a>
                         </div>
                     </div>
             </div>
