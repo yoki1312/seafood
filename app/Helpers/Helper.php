@@ -27,3 +27,18 @@ function getKeranjang(){
     $data = DB::table('keranjang_temporary')->select(DB::RAW('sum(qty) as pesanan'))->where('id_user', $id )->groupby('id_user')->first();
     return isset($data->pesanan) ? number_format($data->pesanan,0) : 0;
 }
+
+function sessionSupplier(){
+  $id = Auth::guard('admin')->user()->id;
+  return DB::table('data_supplier')->where('id_supplier', $id)->first();
+}
+
+function getBarangSupplier(){
+  $id = Auth::guard('admin')->user()->id;
+  $data = DB::table('master_barang')->where('id_supplier',$id)->count();
+  return $data;
+}
+function getContackUs(){
+  $data = DB::table('master_contact_us')->first();
+  return $data;
+}

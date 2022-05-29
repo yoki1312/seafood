@@ -18,17 +18,19 @@ class MasterBarangController extends Controller
         if ($request->ajax()) {
             $data = DB::table('master_barang as ta')
             ->leftjoin('detail_transaksi as tb', 'tb.id_barang','ta.id_barang')
-            ->select(DB::raw('sum(tb.qty) as qty, ta.*'))
-            ->where('id_supplier', Auth::guard('admin')->user()->id)
-            ->groupBy('ta.id_barang')
-            ->get();
+            ->select(DB::raw('sum(tb.qty) as qty, ta.*'));
+            if(Auth::guard('admin')->user()->id == 2){
+                $data->where('id_supplier', Auth::guard('admin')->user()->id);
+            }
+            $data->groupBy('ta.id_barang');
+            $data->get();
             return Datatables::of($data)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
      
-                           $btn = '<button class="edit btn btn-primary btn-sm btn-modal-stok">Tambah Stock</button>';
+                           $btn = '<button class="edit btn btn-primary btn-sm btn-modal-stok">Edit Stock</button>';
                            $btn .= ' <a href="'. route('barang.edit',['id_barang' => $row->id_barang]) .'" class="edit btn btn-info btn-sm">Edit</a>';
-                           $btn .= ' <a href="javascript:void(0)" class="edit btn btn-danger btn-sm">Hapus</a>';
+                           $btn .= ' <a href="'. route('barang.destroy',['id_barang' => $row->id_barang]) .'" class="edit btn btn-danger btn-sm">Hapus</a>';
     
                             return $btn;
                     })
@@ -188,7 +190,9 @@ class MasterBarangController extends Controller
      */
     public function destroy($id)
     {
-        //
+        DB::table('master_barang')->where('id_barang', $id)->delete();
+        DB::table('detail_transaksi')->where('id_barang', $id)->delete();
+        return view('admin.barang.index');
     }
 
     public function tambahStock(Request $request){

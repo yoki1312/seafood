@@ -203,6 +203,7 @@
                     <div class="image">
                         <img src="{{ asset('assetAdmin/img/user2-160x160.jpg') }}" class="img-circle elevation-2"
                             alt="User Image">
+                            <a>{{ Auth::guard('admin')->user()->name }}</a>
                     </div>
                     <div class="info">
                     <a href="#" class="d-block"></a>
@@ -469,6 +470,7 @@
                                         <p>Barang</p>
                                     </a>
                                 </li>
+                                @if(Auth::guard('admin')->user()->is_super == 1)
                                 <li class="nav-item">
                                     <a href="{{ route('kategorisea.index') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
@@ -481,11 +483,12 @@
                                         <p>Jenis Transaksi</p>
                                     </a>
                                 </li>
+                                @endif
                             </ul>
                         </li>
                         <li class="nav-item">
                             <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-table"></i>
+                            <i class="nav-icon fas fa-book"></i>
                                 <p>
                                     Laporan
                                     <i class="fas fa-angle-left right"></i>
@@ -499,7 +502,43 @@
                                     </a>
                                 </li>
                             </ul>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{ route('laporan_perbarang.index') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Penjualan Per Barang</p>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{ route('daftarPembeli.index') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Daftar Pembeli</p>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
+                        @if(Auth::guard('admin')->user()->is_super == 1)
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-book"></i>
+                                <p>
+                                    Setting
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{ route('contactUs.index') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Contac Us</p>
+                                    </a>
+                                </li>
+                            </ul>
+                     
+                        </li>
+                        @endif
                         <!-- <li class="nav-header">EXAMPLES</li>
                         <li class="nav-item">
                             <a href="pages/calendar.html" class="nav-link">
@@ -869,6 +908,14 @@
                                 <p>Warning</p>
                             </a>
                         </li>-->
+                        @if(Auth::guard('admin')->user()->is_super == 2)
+                        <li class="nav-item">
+                            <a href="{{ route('settingAkunSupplier.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-edit"></i>
+                                <p>Setting Akun</p>
+                            </a>
+                        </li> 
+                        @endif
                         <li class="nav-item">
                             <a href="{{ url('supplier/logout') }}" class="nav-link">
                             <i class="nav-icon far fa-circle text-info"></i>
@@ -955,6 +1002,7 @@
     <script src="{{ asset('assetAdmin/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
     <script src="{{ asset('assetAdmin/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
     <script src="{{ asset('assetAdmin/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+    <script src="{{ asset('accounting.min.js') }}"></script>
     <script>
         var _url =  $('meta[name="url"]').attr('content')
         $(document).ready(function () {
@@ -964,6 +1012,9 @@
                 }
             });
         })
+        function renderRp(nilai, decimal) {
+            return accounting.formatNumber(nilai, decimal, " ");
+        }
 
     </script>
     @toastr_render
