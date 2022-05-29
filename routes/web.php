@@ -8,6 +8,7 @@ use App\Http\Controllers\BackEndPesananController;
 use App\Http\Controllers\PageShopController;
 use App\Http\Controllers\PesananController;
 use App\Http\Controllers\MpesananController;
+use App\Http\Controllers\JenisTransaksiController;
 
 
 /*
@@ -79,22 +80,40 @@ Route::controller(MasterBarangController::class)->group(function(){
     Route::delete('barang/{item}', 'destroy')->name('barang.destroy');
 
 });
+Route::controller(JenisTransaksiController::class)->group(function(){
+
+    Route::get('transaksi', 'index')->name('transaksi.index');
+
+    Route::post('transaksi', 'store')->name('transaksi.store');
+
+    Route::get('transaksi/create', 'create')->name('transaksi.create');
+
+    Route::get('transaksi/{id_transaksi}', 'show')->name('transaksi.show');
+    
+    Route::get('transaksi/edit/{id_transaksi}', 'edit')->name('transaksi.edit');
+    
+    Route::post('transaksi/update/{id_transaksi}', 'update')->name('transaksi.update');
+    Route::post('transaksi/tambahStock', 'tambahStock')->name('transaksi.tambahStock');
+    
+    Route::delete('transaksi/hapus/{transaksi}', 'destroy')->name('transaksi.destroy');
+
+});
 
 Route::controller(MasterKategoriController::class)->group(function(){
 
-    Route::get('kategori', 'index')->name('kategori.index');
+    Route::get('kategoriseafood', 'index')->name('kategorisea.index');
 
-    Route::post('kategori', 'store')->name('kategori.store');
+    Route::post('kategoriseafood', 'store')->name('kategorisea.store');
 
-    Route::get('kategori/create', 'create')->name('kategori.create');
+    Route::get('kategoriseafood/create', 'create')->name('kategorisea.create');
 
-    Route::get('kategori/{id_kategori}', 'show')->name('kategori.show');
+    Route::get('kategoriseafood/{id_kategori}', 'show')->name('kategorisea.show');
     
-    Route::get('kategori/edit/{id_kategori}', 'edit')->name('kategori.edit');
+    Route::get('kategoriseafood/edit/{id_kategori}', 'edit')->name('kategorisea.edit');
     
-    Route::post('kategori/update/{id_kategori}', 'update')->name('kategori.update');
+    Route::post('kategoriseafood/update/{id_kategori}', 'update')->name('kategorisea.update');
     
-    Route::delete('kategori/{item}', 'destroy')->name('barang.destroy');
+    Route::delete('kategoriseafood/{item}', 'destroy')->name('kategorisea.destroy');
 
 });
 

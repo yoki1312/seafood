@@ -36,6 +36,7 @@
     <link rel="stylesheet" href="{{ asset('assetAdmin/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
 
     <meta name="csrf-token" content="{{ csrf_token() }}" />
+    <meta name="url" content="{{ url('') }}" />
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -204,7 +205,7 @@
                             alt="User Image">
                     </div>
                     <div class="info">
-                    <a href="#" class="d-block">{{ Auth::guard('admin')->user()->name }}</a>
+                    <a href="#" class="d-block"></a>
                     </div>
                 </div>
 
@@ -469,9 +470,15 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{ route('kategori.index') }}" class="nav-link">
+                                    <a href="{{ route('kategorisea.index') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Kategori Seafood</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('transaksi.index') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Jenis Transaksi</p>
                                     </a>
                                 </li>
                             </ul>
@@ -486,7 +493,7 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{ route('list.pesanan.index') }}" class="nav-link">
+                                    <a href="{{ url('/list.pesanan.index') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Penjualan</p>
                                     </a>
@@ -949,6 +956,7 @@
     <script src="{{ asset('assetAdmin/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
     <script src="{{ asset('assetAdmin/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
     <script>
+        var _url =  $('meta[name="url"]').attr('content')
         $(document).ready(function () {
             $.ajaxSetup({
                 headers: {

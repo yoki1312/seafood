@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use DataTables;
+use App\Models\KategoriSeafood;
 use DB;
 use Auth;
 class MasterKategoriController extends Controller
@@ -15,24 +16,19 @@ class MasterKategoriController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->ajax()) {
-            $data = DB::table('master_kategori_seafood')
-            ->get();
-            return Datatables::of($data)
-                    ->addIndexColumn()
-                    ->addColumn('action', function($row){
-     
-                           $btn = ' <a href="'. route('kategori.edit',['id_kategori' => $row->id_kategori_seafood]) .'" class="edit btn btn-info btn-sm">Edit</a>';
-                           $btn .= ' <a href="javascript:void(0)" class="edit btn btn-danger btn-sm">Hapus</a>';
-    
-                            return $btn;
-                    })
-                    ->rawColumns(['action'])
-                    ->make(true);
+        $seafood = KategoriSeafood::all();
+        if($request->ajax() ){
+          return DataTables::of($seafood)
+                  ->addIndexColumn()
+                  ->addColumn('action', function($row){
+                      $actionBtn = '<a href="javascript:void(0)" class="edit btn btn-success btn-sm btn-edit">Edit</a> <a type="button"  class="delete btn btn-danger btn-sm btn-hapus">Delete</a>';
+                      return $actionBtn;
+                  })
+                  ->rawColumns(['action'])
+                  ->make(true);
         }
-        
-        return view('admin.kategori_seafood.index');
-    }
+          return view('admin.kategori_seafood.index');
+      }
 
     /**
      * Show the form for creating a new resource.
@@ -41,7 +37,6 @@ class MasterKategoriController extends Controller
      */
     public function create()
     {   
-        
         return view('admin.kategori_seafood.add');
     }
 
@@ -72,7 +67,7 @@ class MasterKategoriController extends Controller
            
             DB::commit();
             toastr()->success('Tambah Kategori Berhasil', 'Berhasil');
-            return redirect()->route('kategori.index');
+            return redirect()->route('kategorisea.index');
             // all good
         } catch (\Exception $e) {
             DB::rollback();
