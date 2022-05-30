@@ -5,10 +5,14 @@ use App\Http\Controllers\MasterBarangController;
 use App\Http\Controllers\SupplierAuthController;
 use App\Http\Controllers\MasterKategoriController;
 use App\Http\Controllers\BackEndPesananController;
+use App\Http\Controllers\ContactUsController;
 use App\Http\Controllers\PageShopController;
 use App\Http\Controllers\PesananController;
 use App\Http\Controllers\MpesananController;
 use App\Http\Controllers\JenisTransaksiController;
+use App\Http\Controllers\PesananPerbarangController;
+use App\Http\Controllers\SettingAkunSupplierController;
+use App\Http\Controllers\DaftarPembeliController;
 
 
 /*
@@ -24,10 +28,17 @@ use App\Http\Controllers\JenisTransaksiController;
 
 Route::get('/seafood', function () {
      return view('front.dashboard');
+    });
+    Route::get('logout/user', function () {
+        Auth::guard('web')->logout();
+    return view('front.dashboard');
 });
 
 Route::get('/', function () {
      return view('admin.dashboard');
+});
+Route::get('/contact-us', function () {
+     return view('front.contact-us');
 });
 Route::get('login/supplier', function () {
     return view('admin.login_supplier');
@@ -82,7 +93,7 @@ Route::controller(MasterBarangController::class)->group(function(){
     Route::post('barang/update/{id_barang}', 'update')->name('barang.update');
     Route::post('barang/tambahStock', 'tambahStock')->name('barang.tambahStock');
     
-    Route::delete('barang/{item}', 'destroy')->name('barang.destroy');
+    Route::get('barang/destroy/{id_barang}', 'destroy')->name('barang.destroy');
 
 });
 Route::controller(JenisTransaksiController::class)->group(function(){
@@ -136,7 +147,52 @@ Route::controller(MpesananController::class)->group(function(){
     
     Route::post('kategori/update/{id_kategori}', 'update')->name('kategori.update');
     
-    Route::delete('kategori/{item}', 'destroy')->name('barang.destroy');
+    // Route::delete('kategori/{item}', 'destroy')->name('barang.destroy');
+
+});
+Route::controller(PesananPerbarangController::class)->group(function(){
+
+    Route::get('laporan_perbarang', 'index')->name('laporan_perbarang.index');
+
+    Route::post('laporan_perbarang', 'store')->name('laporan_perbarang.store');
+
+    Route::get('laporan_perbarang/create', 'create')->name('laporan_perbarang.create');
+
+    Route::get('laporan_perbarang/{id_kategori}', 'show')->name('laporan_perbarang.show');
+    
+    Route::get('laporan_perbarang/edit/{id_kategori}', 'edit')->name('laporan_perbarang.edit');
+    
+    Route::post('laporan_perbarang/update/{id_kategori}', 'update')->name('laporan_perbarang.update');
+    
+    // Route::delete('laporan_perbarang/{item}', 'destroy')->name('barang.destroy');
+
+});
+Route::controller(SettingAkunSupplierController::class)->group(function(){
+
+    Route::get('settingAkunSupplier', 'index')->name('settingAkunSupplier.index');
+
+    Route::post('settingAkunSupplier', 'store')->name('settingAkunSupplier.store');
+
+    Route::get('settingAkunSupplier/create', 'create')->name('settingAkunSupplier.create');
+
+    Route::get('settingAkunSupplier/{id_kategori}', 'show')->name('settingAkunSupplier.show');
+    
+    Route::get('settingAkunSupplier/edit/{id_kategori}', 'edit')->name('settingAkunSupplier.edit');
+    
+    Route::post('settingAkunSupplier/update/{id_kategori}', 'update')->name('settingAkunSupplier.update');
+    
+    // Route::delete('settingAkunSupplier/{item}', 'destroy')->name('barang.destroy');
+
+});
+Route::controller(DaftarPembeliController::class)->group(function(){
+
+    Route::get('daftarPembeli', 'index')->name('daftarPembeli.index');
+
+});
+Route::controller(ContactUsController::class)->group(function(){
+
+    Route::get('contactUs', 'index')->name('contactUs.index');
+    Route::post('contactUs/store', 'store')->name('contactUs.store');
 
 });
 

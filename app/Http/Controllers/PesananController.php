@@ -19,14 +19,14 @@ class PesananController extends Controller
         if($request->ajax()){
             $data = DB::table('keranjang_temporary as ta')
             ->leftjoin('master_barang as tb', 'tb.id_barang','ta.id_barang')
-            ->leftJoin('detail_transaksi as tc', function($join) {
-                $join->leftjoin('transaksi as tk', 'tk.id_transaksi','tc.id_transaksi')->on('ta.id_barang','tc.id_barang')->where('tk.id_status','!=',1);
-              })
+            ->leftJoin(DB::raw('(select sum(ta.qty) as qty_stock, ta.id_barang from detail_transaksi ta INNER JOIN transaksi tc on tc.id_transaksi = ta.id_transaksi where tc.id_status in (0,2) GROUP BY ta.id_barang) tz'), function($join){
+                $join->on('tz.id_barang' ,'=' ,'ta.id_barang');
+            })
             ->leftJoin('detail_transaksi as tx', function($join) {
-                $join->leftjoin('transaksi as ti', 'ti.id_transaksi','tx.id_transaksi')->on('ta.id_barang','tx.id_barang')->where('ti.id_jenis_transaksi',1)->where('ti.id_status','!=',1);
+                $join->leftjoin('transaksi as ti', 'ti.id_transaksi','tx.id_transaksi')->on('ta.id_barang','tx.id_barang')->where('ti.id_jenis_transaksi',1)->whereIn('ti.id_status',[0,2]);
               })
             ->leftjoin('admins as td','td.id','tb.id_supplier')
-            ->select(DB::raw('ta.qty, tb.*, sum(tc.qty) sisa_stock, td.name as nama_toko, ta.id_temporary'))
+            ->select(DB::raw('ta.qty, tb.*, tz.qty_stock sisa_stock, td.name as nama_toko, ta.id_temporary'))
             ->where('ta.id_user', Auth::user()->id)
             ->groupBy('ta.id_barang')
             ->get();

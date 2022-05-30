@@ -61,14 +61,11 @@
                 <span class="arrow_carrot-down"></span>
                 <ul>
                     <li><a href="#">Edit Profil</a></li>
-                    <li> <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
+                    <li> <a class="dropdown-item" href="{{ url('logout/user') }}">
                             {{ __('Logout') }}
                         </a></li>
                 </ul>
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                    @csrf
-                </form>
+             
                 @else
                 <a href="{{ url('login/pembeli') }}"><i class="fa fa-user"></i> Login</a>
 
@@ -76,21 +73,19 @@
             </div>
         </div>
         <nav class="humberger__menu__nav mobile-menu">
-            <ul>
-                <li><a href="{{ url('seafood') }}">Home</a></li>
-                <li><a href="{{ route('shop.index') }}">Shop</a></li>
-                <li><a href="{{ route('shop.index') }}">Keranjang</a></li>
-                <li><a href="#">Pages</a>
-                    <ul class="header__menu__dropdown">
-                        <li><a href="./shop-details.html">Shop Details</a></li>
-                        <li><a href="./shoping-cart.html">Shoping Cart</a></li>
-                        <li><a href="./checkout.html">Check Out</a></li>
-                        <li><a href="./blog-details.html">Blog Details</a></li>
-                    </ul>
-                </li>
-                <li><a href="./blog.html">Blog</a></li>
-                <li><a href="./contact.html">Contact</a></li>
-            </ul>
+        <ul>
+                            <li class="home-li"><a href="{{ url('seafood') }}">Home</a></li>
+                            <li class="shop-li"><a href="{{ route('shop.index')}}">Produk</a></li>
+                            @if(isset(Auth::user()->id ))
+                            <li class="pembelian-li"><a href="#">Pembelian</a>
+                                <ul class="header__menu__dropdown">
+                                    <li class="pembelian-li"><a href="{{ route('pesanan.index')}}">Keranjang Saya</a></li>
+                                    <li class="pembelian-li"><a href="{{ route('riwayatPesanan.index') }}">Riwayat Pembelian</a></li>
+                                </ul>
+                            </li>
+                            @endif
+                            <li class="contact-li"><a href="{{ url('contact-us') }}">Contact</a></li>
+                        </ul>
         </nav>
         <div id="mobile-menu-wrap"></div>
         <div class="header__top__right__social">
@@ -116,7 +111,7 @@
                     <div class="col-lg-6 col-md-6">
                         <div class="header__top__left">
                             <ul>
-                                <li><i class="fa fa-envelope"></i> hello@seafood.com</li>
+                                <li><i class="fa fa-envelope"></i> {{ getContackUs()->email_center }}</li>
                                 <!-- <li>Free Shipping for all Order of $99</li> -->
                             </ul>
                         </div>
@@ -136,14 +131,10 @@
                                 <span class="arrow_carrot-down"></span>
                                 <ul>
                                     <li><a href="#">Edit Profil</a></li>
-                                    <li> <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                            {{ __('Logout') }}
-                                        </a></li>
+                                    <li> <a class="dropdown-item" href="{{ url('logout/user') }}">
+                            {{ __('Logout') }}
+                        </a></li>
                                 </ul>
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                    @csrf
-                                </form>
                                 @else
                                 <a href="{{ url('login/pembeli') }}"><i class="fa fa-user"></i> Login</a>
 
@@ -163,18 +154,19 @@
                     </div>
                 </div>
                 <div class="col-lg-6">
-                    <nav class="header__menu">
+                    <nav class="header__menu text-center">
                         <ul>
                             <li class="home-li"><a href="{{ url('seafood') }}">Home</a></li>
                             <li class="shop-li"><a href="{{ route('shop.index')}}">Produk</a></li>
+                            @if(isset(Auth::user()->id ))
                             <li class="pembelian-li"><a href="#">Pembelian</a>
                                 <ul class="header__menu__dropdown">
                                     <li class="pembelian-li"><a href="{{ route('pesanan.index')}}">Keranjang Saya</a></li>
                                     <li class="pembelian-li"><a href="{{ route('riwayatPesanan.index') }}">Riwayat Pembelian</a></li>
                                 </ul>
                             </li>
-                            <li><a href="./blog.html">Blog</a></li>
-                            <li><a href="./contact.html">Contact</a></li>
+                            @endif
+                            <li class="contact-li"><a href="{{ url('contact-us') }}">Contact</a></li>
                         </ul>
                     </nav>
                 </div>
@@ -342,6 +334,7 @@
     <script src="{{ asset('assetAdmin/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
     <script src="{{ asset('assetAdmin/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
     <script src="{{ asset('assetAdmin/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
+   
     <script>
         $(document).ready(function () {
             $.ajaxSetup({

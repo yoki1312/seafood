@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Supplier;
 use Hash;
-
+use DB;
 class SupplierAuthController extends Controller
 {
     /**
@@ -94,9 +94,17 @@ class SupplierAuthController extends Controller
         $admin = Admin::create([
             'name' => $request['nama_supplier'],
             'username' => $request['username'],
+            'is_super' => 0,
             'email' => $request['email'],
             'password' => Hash::make($request['password']),
         ]);
+
+        DB::table('data_supplier')->insert([
+            'id_supplier' => $admin->id,
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
+        ]);
+        // dd($admin->id);
         return redirect()->intended('login/supplier');
         
     }

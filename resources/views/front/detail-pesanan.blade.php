@@ -81,8 +81,8 @@
                                 <div class="checkout__order__total">Total <span>Rp {{ number_format($total,0) }}</span>
                                 </div>
                                 <div class="checkout__input__checkbox">
-                                <small>Nomor Rekening : 09080809808</small><br> 
-                                    <small>Nomor Whatsaap : 09080809808</small>
+                                <small>Nomor Rekening : {{ getContackUs()->no_rekening }} A/n {{ getContackUs()->nama_rekening }}</small><br> 
+                                    <small>Nomor Whatsapp :<a target="_blank" href="https://wa.me/{{ getContackUs()->telp_center }}"> {{ getContackUs()->telp_center }}</a></small>
                                 </div>
                                 <div class="checkout__input__checkbox">
                                     <p>File Pembayaran</p>

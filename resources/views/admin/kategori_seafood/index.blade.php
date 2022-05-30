@@ -36,7 +36,7 @@
                         <div class="row">
                             <div class="col-sm-12 form-group">
                                 <table width="100%"
-                                    class="tb-barang table table-bordered table-hover dataTable dtr-inline table-sm"
+                                    class="tb-barang table table-hover text-nowrap dataTable dtr-inline table-sm"
                                     aria-describedby="example2_info">
                                     <thead>
                                         <tr>
