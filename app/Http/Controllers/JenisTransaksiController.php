@@ -116,7 +116,7 @@ class JenisTransaksiController extends Controller
      */
     public function destroy($id)
     {
-        JenisTransaksi::where('id_jenis_transaksi',$id)->delete();
-      return response()->json(['status' => 200]);
+        DB::table('jenis_transaksi')->where('id_jenis_transaksi', $id)->delete();
+        return view('admin.jenis_transaksi.index');
     }
 }

@@ -483,6 +483,12 @@
                                         <p>Jenis Transaksi</p>
                                     </a>
                                 </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('user.index') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>User</p>
+                                    </a>
+                                </li>
                                 @endif
                             </ul>
                         </li>
@@ -496,7 +502,7 @@
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{ url('/list.pesanan.index') }}" class="nav-link">
+                                    <a href="{{ route('lappenjualan.index') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Penjualan</p>
                                     </a>
@@ -990,6 +996,8 @@
     <!-- <script src="{{ asset('assetAdmin/js/pages/dashboard.js') }}"></script> -->
     <script src="{{ asset('assetAdmin/js/fileinput.min.js') }}"></script>
     <script src="{{ asset('assetAdmin/js/toastr.min.js') }}"></script>
+    <script src="{{ asset('assetAdmin/js/moment.min.js') }}"></script>
+    <script src="{{ asset('assetAdmin/js/datetime.js') }}"></script>
     <script src="{{ asset('assetAdmin/plugins/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('assetAdmin/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('assetAdmin/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>

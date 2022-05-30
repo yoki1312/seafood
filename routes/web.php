@@ -12,7 +12,9 @@ use App\Http\Controllers\MpesananController;
 use App\Http\Controllers\JenisTransaksiController;
 use App\Http\Controllers\PesananPerbarangController;
 use App\Http\Controllers\SettingAkunSupplierController;
-use App\Http\Controllers\DaftarPembeliController;
+use App\Http\Controllers\DaftarPembeliController; 
+use App\Http\Controllers\UserController; 
+use App\Http\Controllers\LaporanPenjualanController; 
 
 
 /*
@@ -109,9 +111,8 @@ Route::controller(JenisTransaksiController::class)->group(function(){
     Route::get('transaksi/edit/{id_transaksi}', 'edit')->name('transaksi.edit');
     
     Route::post('transaksi/update/{id_transaksi}', 'update')->name('transaksi.update');
-    Route::post('transaksi/tambahStock', 'tambahStock')->name('transaksi.tambahStock');
     
-    Route::delete('transaksi/hapus/{transaksi}', 'destroy')->name('transaksi.destroy');
+    Route::delete('transaksi/destroy/{id_transaksi}', 'destroy')->name('transaksi.destroy');
 
 });
 
@@ -189,10 +190,22 @@ Route::controller(DaftarPembeliController::class)->group(function(){
     Route::get('daftarPembeli', 'index')->name('daftarPembeli.index');
 
 });
+Route::controller(LaporanPenjualanController::class)->group(function(){
+
+    Route::get('penjualan', 'index')->name('lappenjualan.index');
+
+});
 Route::controller(ContactUsController::class)->group(function(){
 
     Route::get('contactUs', 'index')->name('contactUs.index');
     Route::post('contactUs/store', 'store')->name('contactUs.store');
+
+});
+Route::controller(UserController::class)->group(function(){
+
+    Route::get('user', 'index')->name('user.index');
+    Route::get('user/create', 'create')->name('user.create');
+    Route::post('user/store', 'store')->name('user.store');
 
 });
 

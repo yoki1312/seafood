@@ -4,12 +4,12 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">Master Transaksi</h1>
+                <h1 class="m-0">Data User</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="#">Home</a></li>
-                    <li class="breadcrumb-item active">Jenis Transaksi</li>
+                    <li class="breadcrumb-item active">Data User</li>
                 </ol>
             </div><!-- /.col -->
         </div><!-- /.row -->
@@ -27,7 +27,7 @@
                         <div class="row">
 
                             <div class="col-sm-12 text-left">
-                                <a href="{{ route('transaksi.create') }}" class="btn btn-sm btn-success">Tambah baru</a>
+                                <a href="{{ route('user.create') }}" class="btn btn-sm btn-success">Tambah baru</a>
                             </div>
                         </div>
                     </div>
@@ -40,7 +40,9 @@
                                     <thead class="table-dark">
                                         <tr>
                                             <th class="text-center">No</th>
-                                            <th class="text-center">jenis transaksi</th>
+                                            <th class="text-center">Nama User</th>
+                                            <th class="text-center">email</th>
+                                            <th class="text-center">dibuat</th>
                                             <th class="text-center">Action</th>
                                         </tr>
                                     </thead>
@@ -67,17 +69,28 @@
         var table = $('.tb-barang').DataTable({
             processing: true,
             serverSide: true,
-            ajax: "{{ route('transaksi.index') }}",
+            ajax: "{{ route('user.index') }}",
             columns: [{
-                    data: 'id_jenis_barang',
+                    data: 'id',
                     className: 'text-center',
                     render: function (data, type, row, meta) {
                         return meta.row + meta.settings._iDisplayStart + 1;
                     }
                 },
                 {
-                    data: 'jenis_transaksi',
+                    data: 'name',
                     name: 'name'
+                },
+                {
+                    data: 'email',
+                    name: 'name'
+                },
+                {
+                    data: 'created_at',
+                    name: 'name',
+                    render: function (data, type, row, meta) {
+                        return moment(data).format('DD-MM-YYYY');;
+                    }
                 },
                 {
                     data: 'action',
