@@ -85,7 +85,7 @@
                     data: 'file_kategori',
                     className: 'text-center',
                     render: function (meta, data, row, type) {
-                        return '<img style="max-width: 100px;" src="'+ url +'/'+ row.file_kategori + '" />';
+                        return '<img style="max-width: 100px;" src="'+ url +'/'+ row.gambar_kategori + '" />';
                     }
                 },
                 {
