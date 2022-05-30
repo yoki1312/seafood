@@ -5,7 +5,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">Laporan Penjualan per Barang</h1>
+                <h1 class="m-0">Laporan Transaksi</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
@@ -31,19 +31,16 @@
                             <thead class="table-dark">
                                 <tr>
                                     <th class="text-center">No</th>
-                                    <th class="text-center">Gambar Barang</th>
-                                    <th class="text-center">Kode Barang</th>
-                                    <th class="text-center">Nama Barang</th>
-                                    <th class="text-center">Total Qty</th>
-                                    <th class="text-center">Total Harga</th>
+                                    <th class="text-center">Kode Transaksi</th>
+                                    <th class="text-center">Tanggal Transaksi</th>
+                                    <th class="text-center">Nama Pembeli</th>
+                                    <th class="text-center">Status Transaksi</th>
                                     <th class="text-center">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                             </tbody>
-
                         </table>
-
                     </div>
                 </div>
             </div>
@@ -51,52 +48,16 @@
     </div><!-- /.container-fluid -->
 </section>
 <!-- /.content -->
-<div class="modal fade bd-example-modal-lg btn-modal-history" tabindex="-1" role="dialog"
-    aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <table class="table table-sm dt-history">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th class="text-center" scope="col">No</th>
-                                    <th class="text-center" scope="col">Kode Transaksi</th>
-                                    <th class="text-center" scope="col">Tanggal Transaksi</th>
-                                    <th class="text-center" scope="col">Nama Pembeli</th>
-                                    <th class="text-center" scope="col">Qty</th>
-                                    <th class="text-center" scope="col">Harga</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th class="text-center" colspan="4">Total</th>
-                                    <th class="text-right"><span class="total-qty"></span></th>
-                                    <th class="text-right"><span class="total-harga"></span></th>
-                                </tr>
-                            </tfoot>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 @endsection
 @section('js')
 <script>
     $(document).ready(function () {
-        var url = "{{ asset('produk/') }}"
         var table = $('.tb-barang').DataTable({
             processing: true,
             serverSide: true,
-            ajax: "{{ route('laporan_perbarang.index') }}",
+            ajax: "{{ route('lappenjualan.index') }}",
             columns: [{
-                    data: 'id_barang',
+                    data: 'id_transaksi',
                     className: 'text-center',
                     searchable: false,
                     render: function (data, type, row, meta) {
@@ -104,37 +65,23 @@
                     }
                 },
                 {
-                    data: 'file_sampul',
+                    data: 'kode_transaksi',
+                },
+                {
+                    data: 'tanggal_transaksi',
                     searchable: false,
                     className: 'text-center',
                     render: function (meta, data, row, type) {
-                        return '<img style="max-width: 100px;" src="' + url + '/' + row
-                            .file_sampul + '" />';
+                        return moment(row.tanggal_transaksi).format('DD-MM-YYYY')
                     }
                 },
                 {
-                    data: 'kode_barang',
+                    data: 'nama_pembeli',
+                    className: 'text-center',
                 },
                 {
-                    data: 'nama_barang',
-                },
-                {
-                    data: 'qty',
-                    name: 'email',
-                    searchable: false,
-                    className: 'text-right',
-                    render: function (meta, data, row, type) {
-                        return renderRp(row.total_qty, 0)
-                    }
-                },
-                {
-                    data: 'qty',
-                    name: 'email',
-                    searchable: false,
-                    className: 'text-right',
-                    render: function (meta, data, row, type) {
-                        return renderRp(row.total_harga, 0)
-                    }
+                    data: 'nama_status',
+                    className: 'text-center',
                 },
                 {
                     data: 'action',
@@ -144,37 +91,6 @@
                     searchable: false
                 },
             ]
-        });
-
-        var listenDataRow;
-        $(document).on('click', '.btn-open-modal-history', function () {
-            var data = table.row($(this).parents('tr')).data();
-            let modal = $('.btn-modal-history');
-            let tableHistory = modal.find('.dt-history');
-            modal.modal('show');
-
-            var detail = data.history;
-            var td = '';
-            var i = 1;
-            let total_harga = 0;
-            let total_qty = 0;
-            detail.forEach((pro) => {
-                td += '<tr>'
-                td += '<td class="text-center">' + i + '</td>'
-                td += '<td>' + pro.kode_transaksi + '</td>'
-                td += '<td>' + pro.tanggal_transaksi + '</td>'
-                td += '<td>' + pro.nama_pembeli + '</td>'
-                td += '<td class="text-right">' + renderRp(Math.abs(pro.qty), 0) + '</td>'
-                td += '<td class="text-right">' + renderRp(pro.harga, 0) + '</td>'
-                td += '</tr>'
-                total_harga += parseFloat(pro.harga);
-                total_qty += Math.abs(pro.qty);
-                i++;
-            });
-            tableHistory.find('tbody').empty().append(td);
-            tableHistory.find('.total-harga').text(renderRp(total_harga, 0))
-            tableHistory.find('.total-qty').text(renderRp(total_qty, 0))
-
         });
     })
 

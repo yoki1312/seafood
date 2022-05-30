@@ -193,6 +193,7 @@ Route::controller(DaftarPembeliController::class)->group(function(){
 Route::controller(LaporanPenjualanController::class)->group(function(){
 
     Route::get('penjualan', 'index')->name('lappenjualan.index');
+    Route::get('laporan_penjualan/detail/{id_transaksi}', 'show')->name('laporan_penjualan.detail');
 
 });
 Route::controller(ContactUsController::class)->group(function(){

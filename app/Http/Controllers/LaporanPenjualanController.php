@@ -17,33 +17,25 @@ class LaporanPenjualanController extends Controller
     public function index(Request $request)
     {
         if($request->ajax()){
-            $data = DB::table('detail_transaksi as ta')
-            ->join('master_barang as tb', 'tb.id_barang','ta.id_barang')
-            ->join('transaksi as tc','tc.id_transaksi','ta.id_transaksi')
-            ->select(DB::raw('sum(abs(ta.qty)) as total_qty, sum(ta.harga) as total_harga, tc.kode_transaksi,tc.tanggal_transaksi,tb.*'))
-            ->where('tc.id_status',2)
-            ->where('tc.id_jenis_transaksi',1);
+            $data = DB::table('transaksi as ta')
+            ->leftjoin('users as tb', 'tb.id','ta.id_user_pembeli')
+            ->leftjoin('master_status_pembelian as tc', 'tc.id_status_pembelian','ta.id_status')
+            ->select(DB::raw('ta.id_transaksi, ta.kode_transaksi,ta.tanggal_transaksi,tb.name as nama_pembeli,tc.nama_status'));
             if(Auth::guard('admin')->user()->id == 0){
                 $data->where('tb.id_supplier',  Auth::guard('admin')->user()->id);
             }
-            $data->groupBy('ta.id_barang');
             $data->get();
             return Datatables::of($data)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
                         $btn ='';
-                           $btn = '<button class="edit btn btn-primary btn-sm btn-open-modal-history">History Pembelian</button>';
+                           $btn = '<a href="'. route('laporan_penjualan.detail',['id_transaksi' => $row->id_transaksi]) .'" class="edit btn btn-primary btn-sm">Detail Transaksi</a>';
                         //    $btn .= ' <a href="'. route('barang.edit',['id_barang' => $row->id_barang]) .'" class="edit btn btn-info btn-sm">Edit</a>';
                         //    $btn .= ' <a href="javascript:void(0)" class="edit btn btn-danger btn-sm">Hapus</a>';
     
-                            return $btn;
+                        return $btn;
                     })
                     ->rawColumns(['action'])
-                    ->addColumn('history', function($row){
-                        $history = $this->historyPembelian($row->id_barang);
-                        return json_decode($history);
-                    })
-                    ->rawColumns(['action','history'])
                     ->make(true);
         }
         return view('admin.laporan_penjualan.index');
@@ -78,7 +70,23 @@ class LaporanPenjualanController extends Controller
      */
     public function show($id)
     {
-        //
+        $header = DB::table('transaksi as ta')
+        ->leftjoin('users as tb', 'tb.id','ta.id_user_pembeli')
+        ->leftjoin('master_status_pembelian as tc', 'tc.id_status_pembelian','ta.id_status')
+        ->select(DB::raw('ta.id_transaksi, ta.kode_transaksi,ta.tanggal_transaksi,tb.name as nama_pembeli,tc.nama_status'))
+        ->where('ta.id_transaksi', $id)
+        ->groupBy('ta.kode_transaksi')
+        ->first();
+        $data = DB::table('transaksi as ta')
+        ->leftjoin('detail_transaksi as tb','tb.id_transaksi','ta.id_transaksi')
+        ->leftjoin('users as tc','tc.id','ta.id_user_pembeli')
+        ->leftjoin('master_barang as td','td.id_barang','tb.id_barang')
+        ->leftjoin('detail_barang as te','te.id_barang','td.id_barang')
+        ->leftjoin('master_status_pembelian as tf','tf.id_status_pembelian','ta.id_status')
+        ->select('ta.id_transaksi','tb.harga','tb.qty','ta.kode_transaksi','ta.tanggal_transaksi','tc.name as nama_pembeli','td.*')
+        ->where('ta.id_transaksi', $id)
+        ->get();
+        return view('admin.laporan_penjualan.detail', compact('header','data'));
     }
 
     /**
