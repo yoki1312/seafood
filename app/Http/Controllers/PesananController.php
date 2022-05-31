@@ -219,7 +219,7 @@ class PesananController extends Controller
             'nomor_hp' => $request->nomor_hp,
             'file'  => $fileName
         ]);
-        return view('front.cekout');
+        return redirect('/seafood');
         // dd($request->all());
     }
 

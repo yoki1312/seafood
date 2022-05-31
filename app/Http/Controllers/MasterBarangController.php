@@ -19,7 +19,7 @@ class MasterBarangController extends Controller
             $data = DB::table('master_barang as ta')
             ->leftjoin('detail_transaksi as tb', 'tb.id_barang','ta.id_barang')
             ->select(DB::raw('sum(tb.qty) as qty, ta.*'));
-            if(Auth::guard('admin')->user()->id == 2){
+            if(Auth::guard('admin')->user()->is_super == 2){
                 $data->where('id_supplier', Auth::guard('admin')->user()->id);
             }
             $data->groupBy('ta.id_barang');
@@ -82,7 +82,7 @@ class MasterBarangController extends Controller
 
             $id_barang = DB::getPdo()->lastInsertId();
            
-            foreach($request->file('file') as $item=>$r){
+            foreach($request->file('file') as $item => $r){
                 $fileName = time()."_". str_replace(' ' ,'_',$r->getClientOriginalName());
                 $r->move(public_path().'/produk', $fileName);
                 $data2=array(
@@ -91,6 +91,11 @@ class MasterBarangController extends Controller
                     'created_at' => date('Y-m-d'),
                     'updated_at' => date('Y-m-d')
                 );
+                if($item == 0){
+                    DB::table('master_barang')->where('id_barang', $id_barang)->update([
+                        'file_sampul' => $fileName
+                    ]);
+                }
                 DB::table('detail_barang')->insert($data2);
             }
             DB::commit();

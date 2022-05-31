@@ -20,10 +20,13 @@ class LaporanPenjualanController extends Controller
             $data = DB::table('transaksi as ta')
             ->leftjoin('users as tb', 'tb.id','ta.id_user_pembeli')
             ->leftjoin('master_status_pembelian as tc', 'tc.id_status_pembelian','ta.id_status')
+            ->leftjoin('detail_transaksi as td','td.id_transaksi','ta.id_transaksi')
+            ->leftjoin('master_barang as te','te.id_barang','td.id_barang')
             ->select(DB::raw('ta.id_transaksi, ta.kode_transaksi,ta.tanggal_transaksi,tb.name as nama_pembeli,tc.nama_status'));
-            if(Auth::guard('admin')->user()->id == 0){
-                $data->where('tb.id_supplier',  Auth::guard('admin')->user()->id);
+            if(Auth::guard('admin')->user()->is_super == 2){
+                $data->where('te.id_supplier',  Auth::guard('admin')->user()->id);
             }
+            $data->groupby('ta.id_transaksi');
             $data->get();
             return Datatables::of($data)
                     ->addIndexColumn()
@@ -73,20 +76,24 @@ class LaporanPenjualanController extends Controller
         $header = DB::table('transaksi as ta')
         ->leftjoin('users as tb', 'tb.id','ta.id_user_pembeli')
         ->leftjoin('master_status_pembelian as tc', 'tc.id_status_pembelian','ta.id_status')
-        ->select(DB::raw('ta.id_transaksi, ta.kode_transaksi,ta.tanggal_transaksi,tb.name as nama_pembeli,tc.nama_status'))
+        ->select(DB::raw('ta.id_transaksi,tb.name as nama_pembeli,tc.nama_status, ta.created_at,ta.*'))
         ->where('ta.id_transaksi', $id)
         ->groupBy('ta.kode_transaksi')
         ->first();
+        
+        $data_transaksi = DB::table('data_transaksi as ta')->where('ta.id_transaksi', $id)
+        ->first();
+
         $data = DB::table('transaksi as ta')
         ->leftjoin('detail_transaksi as tb','tb.id_transaksi','ta.id_transaksi')
         ->leftjoin('users as tc','tc.id','ta.id_user_pembeli')
         ->leftjoin('master_barang as td','td.id_barang','tb.id_barang')
-        ->leftjoin('detail_barang as te','te.id_barang','td.id_barang')
         ->leftjoin('master_status_pembelian as tf','tf.id_status_pembelian','ta.id_status')
-        ->select('ta.id_transaksi','tb.harga','tb.qty','ta.kode_transaksi','ta.tanggal_transaksi','tc.name as nama_pembeli','td.*')
+        ->leftjoin('admins as tg', 'tg.id', 'td.id_supplier')
+        ->select('ta.id_transaksi','tb.harga','tb.qty','ta.kode_transaksi','ta.tanggal_transaksi','tc.name as nama_pembeli','td.*','tg.name as nama_toko')
         ->where('ta.id_transaksi', $id)
         ->get();
-        return view('admin.laporan_penjualan.detail', compact('header','data'));
+        return view('admin.laporan_penjualan.detail', compact('header','data','data_transaksi'));
     }
 
     /**
@@ -118,8 +125,12 @@ class LaporanPenjualanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function acc_pembayaran($id)
     {
-        //
+        DB::table('transaksi')->where('id_transaksi', $id)->update([
+            'id_status' => 2
+        ]);
+
+        return redirect()->back();
     }
 }

@@ -41,8 +41,8 @@
                         <div class="col-sm-3 form-group">
                             <label>Satuan Barang</label>
                             <select name="satuan_barang" class="form-control form-control-sm ">
-                                <option>KG</option>
-                                <option>Ton</option>
+                                <option value="kg">KG</option>
+                                <option value="pcs">PCS</option>
                             </select>
                         </div>
                         <div class="col-sm-3 form-group">

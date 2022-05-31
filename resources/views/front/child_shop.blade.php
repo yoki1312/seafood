@@ -2,7 +2,7 @@
 <div class="col-lg-3 col-md-6 col-sm-6">
     <div class="product__item">
         <div class="product__item__pic set-bg" data-setbg="{{ asset('produk/'. $k->file_sampul) }}"
-        style="background-image: url( {{ asset('produk/'. $k->file_sampul) }} )">>
+        style="background-image: url( {{ asset('produk/'. $k->file_sampul) }} )">
             <ul class="product__item__pic__hover">
                 <li><a data-id="{{ $k->id_barang }}" class="btn-add-to-chart" type="button"><i
                             class="fa fa-shopping-cart"></i></a></li>

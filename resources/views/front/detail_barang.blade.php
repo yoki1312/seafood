@@ -25,14 +25,16 @@
             <div class="col-lg-6 col-md-6">
                 <div class="product__details__pic">
                     <div class="product__details__pic__item">
-                        <img class="product__details__pic__item--large" src="{{ asset('produk/'. $data->file_sampul) }}" alt="">
+                        <img class="product__details__pic__item--large" style="max-height: 550px;" src="{{ asset('produk/'. $data->file_sampul) }}" alt="">
                         
                     </div>
                     <div class="product__details__pic__slider owl-carousel">
+                        @if(count($file) > 1)
                         @foreach($file as $k)
                         <img data-imgbigurl="{{ asset('produk/'. $k->file) }}" src="{{ asset('produk/'. $k->file) }}"
                             alt="">
                         @endforeach
+                        @endif
                     </div>
                 </div>
             </div>
