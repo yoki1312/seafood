@@ -61,7 +61,7 @@
                                     <div class="d-flex flex-row align-items-center mb-4">
                                         <i class="fas fa-key fa-lg me-3 fa-fw"></i>
                                         <div class="form-outline flex-fill mb-0">
-                                            <input type="password-confirm" id="password-confirm" class="form-control"
+                                            <input type="password" id="password-confirm" class="form-control"
                                                 name="password_confirmation" required autocomplete="new-password" />
                                             <label class="form-label" for="form3Example4cd">Repeat your password</label>
                                         </div>
@@ -77,7 +77,7 @@
 
                                     <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
                                         <button type="submit" class="btn btn-primary">
-                                            {{ __('Reset Password') }}
+                                            {{ __('Register') }}
                                         </button>
                                     </div>
 

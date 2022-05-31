@@ -48,11 +48,15 @@ Route::get('login/supplier', function () {
 Route::get('login/pembeli', function () {
     return view('front.login');
 });
+Route::get('register/pembeli', function () {
+    return view('front.register');
+});
 Route::get('register/supplier', function () {
     return view('admin.registrasi_supplier');
 });
 
 Route::post('register/akun/supplier',[SupplierAuthController::class,'register']);
+Route::post('register/akun/pembeli',[RegisterController::class,'registeruser']);
 Route::post('login/supplier/store',[SupplierAuthController::class,'login']);
 Route::get('supplier/logout',[SupplierAuthController::class,'logout']);
 
