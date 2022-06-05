@@ -42,3 +42,12 @@ function getContackUs(){
   $data = DB::table('master_contact_us')->first();
   return $data;
 }
+
+function dataDashboard() {
+  $k = new \stdClass();
+  $k->total_user = DB::table('users')->count();
+  $k->total_supplier = DB::table('data_supplier')->count();
+  $k->total_transaksi = DB::table('data_transaksi')->count();
+  $k->total_barang = DB::table('master_barang')->count();
+  return $k;
+}
