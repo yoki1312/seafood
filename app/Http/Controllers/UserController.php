@@ -17,7 +17,11 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $data = User::all();
+        $data = User::leftJoin(DB::raw('(select count(*) total_pembelian, id_user_pembeli from transaksi where id_status = 2 group by id_user_pembeli) tz'), function($join){
+            $join->on('tz.id_user_pembeli' ,'=' ,'users.id');
+        })
+        ->select(DB::RAW('users.* , tz.total_pembelian'))
+        ->groupby('users.id');
         if($request->ajax() ){
           return DataTables::of($data)
                   ->addIndexColumn()

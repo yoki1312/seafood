@@ -41,8 +41,9 @@
                                         <tr>
                                             <th class="text-center">No</th>
                                             <th class="text-center">Nama User</th>
-                                            <th class="text-center">email</th>
-                                            <th class="text-center">dibuat</th>
+                                            <th class="text-center">Email</th>
+                                            <th class="text-center">Tanggal Terdaftar</th>
+                                            <th class="text-center">Total Pembelian</th>
                                             <th class="text-center">Action</th>
                                         </tr>
                                     </thead>
@@ -87,9 +88,18 @@
                 },
                 {
                     data: 'created_at',
-                    name: 'name',
+                    className : 'text-center',
                     render: function (data, type, row, meta) {
-                        return moment(data).format('DD-MM-YYYY');;
+                        return moment(data).format('DD-MM-YYYY hh:mm:ss');
+                    }
+                },
+                {
+                    data: 'total_pembelian',
+                    className: 'text-center',
+                    orderable: false,
+                    searchable: false,
+                    render: function (data, type, row, meta) {
+                        return (row.total_pembelian || 0) + ' Transaksi';
                     }
                 },
                 {

@@ -26,6 +26,7 @@ class LaporanPenjualanController extends Controller
             if(Auth::guard('admin')->user()->is_super == 2){
                 $data->where('te.id_supplier',  Auth::guard('admin')->user()->id);
             }
+            $data->where('ta.id_jenis_transaksi', 1);
             $data->groupby('ta.id_transaksi');
             $data->get();
             return Datatables::of($data)
@@ -84,15 +85,18 @@ class LaporanPenjualanController extends Controller
         $data_transaksi = DB::table('data_transaksi as ta')->where('ta.id_transaksi', $id)
         ->first();
 
-        $data = DB::table('transaksi as ta')
+        $sql = DB::table('transaksi as ta')
         ->leftjoin('detail_transaksi as tb','tb.id_transaksi','ta.id_transaksi')
         ->leftjoin('users as tc','tc.id','ta.id_user_pembeli')
         ->leftjoin('master_barang as td','td.id_barang','tb.id_barang')
         ->leftjoin('master_status_pembelian as tf','tf.id_status_pembelian','ta.id_status')
         ->leftjoin('admins as tg', 'tg.id', 'td.id_supplier')
         ->select('ta.id_transaksi','tb.harga','tb.qty','ta.kode_transaksi','ta.tanggal_transaksi','tc.name as nama_pembeli','td.*','tg.name as nama_toko')
-        ->where('ta.id_transaksi', $id)
-        ->get();
+        ->where('ta.id_transaksi', $id);
+        if(Auth::guard('admin')->user()->is_super == 2){
+            $sql->where('td.id_supplier',  Auth::guard('admin')->user()->id);
+        }
+        $data = $sql->get();
         return view('admin.laporan_penjualan.detail', compact('header','data','data_transaksi'));
     }
 

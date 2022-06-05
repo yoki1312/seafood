@@ -93,9 +93,9 @@
                                     <td>{{$k->kode_barang}}</td>
                                     <td>{{$k->kode_barang}}</td>
                                     <td>{{$k->nama_barang}}</td>
-                                    <td>{{$k->harga_barang}}</td>
+                                    <td class="text-right">{{ number_format($k->harga_barang,0)     }}</td>
                                     <td class="text-right">{{abs($k->qty)}}</td>
-                                    <td class="text-right">{{number_format($k->harga_barang * abs($k->qty),2)}}</td>
+                                    <td class="text-right">{{number_format($k->harga_barang * abs($k->qty),0)}}</td>
                                 </tr>
                                 @php
                                 $total_qty += abs($k->qty);
@@ -116,7 +116,7 @@
                                 <tbody>
                                     <tr class="text-right">
                                         <th style="width:50%">Total:</th>
-                                        <td>{{ number_format($total_harga,2) }}</td>
+                                        <td>{{ number_format($total_harga,0) }}</td>
                                     </tr>
                                 </tbody>
                             </table>
