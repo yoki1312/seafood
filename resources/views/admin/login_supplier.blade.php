@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="{{ asset('assetAdmin/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('assetAdmin/css/adminlte.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assetAdmin/css/toastr.min.css') }}">
 </head>
 
 <body class="hold-transition login-page">
@@ -78,6 +79,8 @@
     <script src="{{ asset('assetAdmin/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <!-- AdminLTE App -->
     <script src="{{ asset('assetAdmin/js/adminlte.js') }}"></script>
+    <script src="{{ asset('assetAdmin/js/toastr.min.js') }}"></script>
+    @toastr_render
 </body>
 
 </html>

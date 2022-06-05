@@ -75,6 +75,13 @@
                         <li><b>Tersedia</b> <span>In {{ number_format($data->stock,0) }} Stock</span></li>
                         <li><b>Terjual</b> <span>{{ abs($data->terjual) }} </li>
                         <li><b>Kategori</b> <span>{{ $data->nama_kategori }} </li>
+                        <li>  <b>Rating Barang </b>
+                            <span class="rating-1 rt fa fa-star"></span>
+                            <span class="rating-2 rt fa fa-star"></span>
+                            <span class="rating-3 rt fa fa-star"></span>
+                            <span class="rating-4 rt fa fa-star"></span>
+                            <span class="rating-5 rt fa fa-star"></span>
+                        </li>
                         <!-- <li><b>Weight</b> <span>0.5 kg</span></li>
                         <li><b>Share on</b>
                             <div class="share">
@@ -92,7 +99,7 @@
                     <ul class="nav nav-tabs" role="tablist">
                         <li class="nav-item">
                             <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab"
-                                aria-selected="false">Komentar Produk <span class="total-komentar"></span></a>
+                                aria-selected="false">Preview Produk <span class="total-komentar"></span></a>
                         </li>
                     </ul>
                     <div class="tab-content">
@@ -106,7 +113,7 @@
                             <div class="product__details__tab__desc" style="padding-top: 0px !important;">
                                 <div class="row">
                                     <div class="col-sm-12">
-                                        <h6>Tambah Komentar</h6>
+                                        <h6>Tambah Preview</h6>
                                     </div>
                                     <div class="col-sm-12">
                                         <label class="form-label">Rating Barang : &nbsp;&nbsp;</label>
@@ -122,7 +129,7 @@
                                     </div>
                                     <div class="col-sm-12 text-right">
                                         <button data-id="{{ $data->id_barang }}" type="button"
-                                            class="btn btn-sm btn-success btn-kirim-komentar">Kirim Komentar</button>
+                                            class="btn btn-sm btn-success btn-kirim-komentar">Kirim Preview</button>
 
                                     </div>
                                 </div>
@@ -312,13 +319,15 @@
             url: url,
             method: 'POST',
             success: function (response) {
-                $('.row-komentar').empty()
+                $('.row-komentar').empty();
+                let total_rating = 0;
                 response.data.forEach((pro) => {
+                    total_rating += parseFloat(pro.rating)
                     var template =
                         `<div class="col-sm-12" style="border: 1px #ebebeb solid;border-radius: 5px;padding: 15px;"> 
                             <div class="row form-group" style="background: #f2f2f2;">
-                                <div class="col-sm-6 text-left"><b>Komentar Oleh : ` + pro.name + `</b>
-                                    <p><small>Tanggal komentar : ` + pro.created_at + `</small></p>
+                                <div class="col-sm-6 text-left"><b>Preview Oleh : ` + pro.name + `</b>
+                                    <p><small>Tanggal Preview : ` + pro.created_at + `</small></p>
                                 </div>
                                 <div class="col-sm-6 text-right div-auth-` + pro.id_komentar + `">
                                     <button koment-id="` + pro.id_komentar + `" class="btn btn-sm btn-danger btn-remove-komentar"><i class="fa fa-trash"></i>
@@ -328,14 +337,14 @@
                             <div class="row">
                                 <div class="col-sm-12">
                                     <label class="form-label">Rating Barang : &nbsp;&nbsp;</label>
-                                    <span class="` + (pro.rating > 1 ? ' checked-rating' : '') + ` fa fa-star"></span>
-                                    <span class="` + (pro.rating > 2 ? ' checked-rating' : '') + ` fa fa-star"></span>
-                                    <span class="` + (pro.rating > 3 ? ' checked-rating' : '') + ` fa fa-star"></span>
-                                    <span class="` + (pro.rating > 4 ? ' checked-rating' : '') + ` fa fa-star"></span>
-                                    <span class="` + (pro.rating > 5 ? ' checked-rating' : '') + ` fa fa-star"></span>
+                                    <span class="` + (pro.rating >= 1 ? ' checked-rating' : '') + ` fa fa-star"></span>
+                                    <span class="` + (pro.rating >= 2 ? ' checked-rating' : '') + ` fa fa-star"></span>
+                                    <span class="` + (pro.rating >= 3 ? ' checked-rating' : '') + ` fa fa-star"></span>
+                                    <span class="` + (pro.rating >= 4 ? ' checked-rating' : '') + ` fa fa-star"></span>
+                                    <span class="` + (pro.rating >= 5 ? ' checked-rating' : '') + ` fa fa-star"></span>
                                 </div>
                                 <div class="col-sm-12">
-                                    ` + pro.komentar + `
+                                    ` + (pro.komentar == null ? '' : pro.komentar) + `
                                 </div>
                             </div>
                         </div><br>`
@@ -347,7 +356,13 @@
                 var total_komentar = response.data.length;
                 $('.total-komentar').text('(' + total_komentar + ')');
                 $('.rating').removeClass('checked-rating')
-                $('.rating-val').val('0')
+                $('.rating-val').val('0');
+                let total_rating_produk = Math.floor(total_rating/ total_komentar);
+                $('.rt').removeClass('checked-rating');
+                console.log(total_rating_produk);
+                for(i=1; i<=total_rating_produk; i++){
+                    $(".rating-" + i).addClass('checked-rating');
+                }
             },
             error: function (error) {
                 console.log(error)

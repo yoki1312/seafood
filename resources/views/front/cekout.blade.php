@@ -1,6 +1,6 @@
 @extends('front.index')
 @section('front')
-<section class="breadcrumb-section set-bg" data-setbg="{{ asset('assetFront/img/breadcrumb.webp')  }}">
+<section class="breadcrumb-section set-bg" data-setbg="https://asset-a.grid.id/crop/0x0:0x0/750x500/photo/makemac/2014/06/Wallpaper-iOS-8.jpg">
     <div class="container">
         <div class="row">
             <div class="col-lg-12 text-center">
@@ -9,8 +9,6 @@
                     <div class="breadcrumb__option">
                         <a href="./index.html">Home</a>
                         <span>Daftar Pesanan</span>
-                        <button type="button" class="btn btn-primary" data-toggle="modal"
-                            data-target=".bd-example-modal-lg">Large modal</button>
                     </div>
                 </div>
             </div>

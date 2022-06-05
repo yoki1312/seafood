@@ -1,5 +1,5 @@
 @foreach($data as $k)
-<div class="col-lg-3 col-md-6 col-sm-6">
+<div class="col-lg-4 col-md-6 col-sm-6">
     <div class="product__item">
         <div class="product__item__pic set-bg" data-setbg="{{ asset('produk/'. $k->file_sampul) }}"
         style="background-image: url( {{ asset('produk/'. $k->file_sampul) }} )">

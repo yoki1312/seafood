@@ -1,6 +1,6 @@
 @extends('front.index')
 @section('front')
-<section class="breadcrumb-section set-bg" data-setbg="{{ asset('assetFront/img/breadcrumb.webp')  }}">
+<section class="breadcrumb-section set-bg" data-setbg="https://asset-a.grid.id/crop/0x0:0x0/750x500/photo/makemac/2014/06/Wallpaper-iOS-8.jpg">
     <div class="container">
         <div class="row">
             <div class="col-lg-12 text-center">
@@ -44,20 +44,14 @@
                 <h4><b>Daftar Produk Seafood</b></h4>
                 <div class="filter__item">
                     <div class="row">
-                        <div class="col-lg-4 col-md-5">
+                        <div class="col-lg-8 col-md-5">
                             <div class="filter__sort">
-                                <span>Sort By</span>
+                                <span>Urutkan berdasarkan</span>
                                 <select class="sorting" onchange="getProduk()">
                                     <option value="1">Terbaru</option>
                                     <option value="2">Terjual Paling Banyak </option>
                                     <option value="3">Stok Paling Banyak </option>
                                 </select>
-                                <!-- <div class="nice-select" tabindex="0"><span class="current">Default</span>
-                                    <ul class="list">
-                                        <li data-value="0" class="option selected">Default</li>
-                                        <li data-value="0" class="option">Default</li>
-                                    </ul>
-                                </div> -->
                             </div>
                         </div>
                         <div class="col-lg-4 col-md-4">

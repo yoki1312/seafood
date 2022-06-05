@@ -14,3 +14,5 @@ yarn-error.log
 /.idea
 /.vscode
 public/.DS_Store
+public/foto-supplier/
+public/.DS_Store

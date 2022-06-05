@@ -95,6 +95,19 @@ Route::controller(PageShopController::class)->group(function(){
 
 });
 
+Route::controller(SupplierAuthController::class)->group(function(){
+
+    Route::get('tet', 'tet');
+    Route::get('akunSupplier', 'index')->name('akunSupplier.index');
+    Route::get('akunSupplier/aktif/{id_supplier}', 'aktif')->name('akunSupplier.aktif');
+    Route::get('akunSupplier/nonaktif/{id_supplier}', 'nonaktif')->name('akunSupplier.nonaktif');
+    Route::get('akunSupplier/edit/{id_supplier}', 'edit')->name('akunSupplier.edit');
+    Route::get('akunSupplier/detail/{id_supplier}', 'show')->name('akunSupplier.show');
+    Route::get('akunSupplier/destroy/{id_supplier}', 'destroy')->name('akunSupplier.destroy');
+    Route::post('akunSupplier/update', 'update')->name('akunSupplier.update');
+
+});
+
 Route::controller(MasterBarangController::class)->group(function(){
 
     Route::get('barang', 'index')->name('barang.index');

@@ -1535,9 +1535,13 @@ ol {
 }
 
 .product__item__pic {
-	height: 150px;
+	height: 250px;
 	position: relative;
 	overflow: hidden;
+	padding: 40px;
+    background-color: whitesmoke;
+	background-repeat: no-repeat;
+    background-origin: content-box;
 }
 
 .product__item__pic__hover {

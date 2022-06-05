@@ -164,7 +164,7 @@
                             <li class="shop-li"><a href="{{ route('shop.index')}}">Produk</a></li>
                             @if(isset(Auth::user()->id ))
                             <li class="pembelian-li"><a href="#">Pembelian</a>
-                                <ul class="header__menu__dropdown">
+                                <ul class="header__menu__dropdown text-left">
                                     <li class="pembelian-li"><a href="{{ route('pesanan.index')}}">Keranjang Saya</a></li>
                                     <li class="pembelian-li"><a href="{{ route('riwayatPesanan.index') }}">Riwayat Pembelian</a></li>
                                 </ul>
