@@ -21,7 +21,7 @@ class PesananPerbarangController extends Controller
             ->join('master_barang as tb', 'tb.id_barang','ta.id_barang')
             ->join('transaksi as tc','tc.id_transaksi','ta.id_transaksi')
             ->select(DB::raw('sum(abs(ta.qty)) as total_qty, sum(ta.harga) as total_harga, tc.kode_transaksi,tc.tanggal_transaksi,tb.*'))
-            ->where('tc.id_status',2)
+            ->whereIn('tc.id_status',[2,4])
             ->where('tc.id_jenis_transaksi',1);
             if(Auth::guard('admin')->user()->id == 0){
                 $data->where('tb.id_supplier',  Auth::guard('admin')->user()->id);
@@ -54,7 +54,7 @@ class PesananPerbarangController extends Controller
         ->join('transaksi as tb','tb.id_transaksi','ta.id_transaksi')
         ->join('users as tc','tc.id','tb.id_user_pembeli')
         ->select('ta.qty','ta.harga','tb.kode_transaksi','tb.tanggal_transaksi','tc.name as nama_pembeli')
-        ->where('tb.id_status',2)
+        ->whereIn('tb.id_status',[2,4])
         ->where('tb.id_jenis_transaksi',1)
         ->where('ta.id_barang', $id_barang)
         ->get();

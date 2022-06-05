@@ -43,6 +43,7 @@
                             <select name="satuan_barang" class="form-control form-control-sm ">
                                 <option value="kg">KG</option>
                                 <option value="pcs">PCS</option>
+                                <option value="pack" selected>Pack</option>
                             </select>
                         </div>
                         <div class="col-sm-3 form-group">

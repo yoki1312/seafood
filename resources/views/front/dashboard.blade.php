@@ -23,7 +23,7 @@
             <div class="categories__slider owl-carousel">
                 @foreach(sliderKategori() as $k)
                 <div class="col-lg-3">
-                    <div class="categories__item set-bg"
+                    <div class="categories__item set-bg" style="border-radius: 30%;"
                         data-setbg="{{ asset('kategori-image/'. $k->gambar_kategori) }}">
                         <h5><a href="#">{{ $k->nama_kategori }}</a></h5>
                     </div>

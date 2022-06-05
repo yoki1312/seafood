@@ -25,8 +25,9 @@
             <div class="col-lg-6 col-md-6">
                 <div class="product__details__pic">
                     <div class="product__details__pic__item">
-                        <img class="product__details__pic__item--large" style="max-height: 550px;" src="{{ asset('produk/'. $data->file_sampul) }}" alt="">
-                        
+                        <img class="product__details__pic__item--large" style="max-height: 550px;"
+                            src="{{ asset('produk/'. $data->file_sampul) }}" alt="">
+
                     </div>
                     <div class="product__details__pic__slider owl-carousel">
                         @if(count($file) > 1)
@@ -42,7 +43,8 @@
                 <div class="product__details__text">
                     <input type="text" class="id_barang" value="{{ $data->id_barang }}" hidden />
                     <h3>{{ $data->nama_barang }}</h3>
-                    <div class="product__details__price">Harga Rp {{ number_format($data->harga_barang,0) }} ({{ $data->satuan_barang }})</div>
+                    <div class="product__details__price">Harga Rp {{ number_format($data->harga_barang,0) }}
+                        ({{ $data->satuan_barang }})</div>
                     <p>{{ $data->deskripsi_barang }}.</p>
                     <div class="row">
                         <div class="col-sm-3">
@@ -105,6 +107,17 @@
                                 <div class="row">
                                     <div class="col-sm-12">
                                         <h6>Tambah Komentar</h6>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <label class="form-label">Rating Barang : &nbsp;&nbsp;</label>
+                                        <span data-star="1" class="rating fa fa-star"></span>
+                                        <span data-star="2" class="rating fa fa-star"></span>
+                                        <span data-star="3" class="rating fa fa-star"></span>
+                                        <span data-star="4" class="rating fa fa-star"></span>
+                                        <span data-star="5" class="rating fa fa-star"></span>
+                                    </div>
+                                    <input type="hidden" class="rating-val" name="rating" value="0" />
+                                    <div class="col-sm-12">
                                         <textarea class="komentar-value" id="text-komentar"></textarea><br>
                                     </div>
                                     <div class="col-sm-12 text-right">
@@ -160,7 +173,21 @@
 @section('js')
 <script>
     $(document).ready(function () {
-        $('#text-komentar').summernote();
+        $(document).on('click', '.rating', function(){
+            let index = $(this).attr('data-star');
+            let ratingStart = 1;
+            $('.rating').removeClass('checked-rating')
+            for(i=ratingStart; i<=index; i++){
+                $("[data-star='" + i + "']").addClass('checked-rating')
+            }
+            $('.rating-val').val(index)
+        })
+        $('#text-komentar').summernote({
+            maximumImageFileSize: 500 * 1024,
+            toolbar: [
+                ['insert', ['picture']],
+            ],
+        });
         getKomentarProduk()
         $(document).on('click', '.btn-kirim-komentar', function () {
             let id_barang = $(this).attr('data-id');
@@ -174,6 +201,7 @@
                 method: 'POST',
                 data: {
                     id_barang: id_barang,
+                    rating : $('.rating-val').val(),
                     komentar: $('.komentar-value').val()
                 },
                 success: function (response) {
@@ -287,12 +315,30 @@
                 $('.row-komentar').empty()
                 response.data.forEach((pro) => {
                     var template =
-                        '<div class="col-sm-12" style="border: 1px #ebebeb solid;border-radius: 5px;padding: 15px;"> <div class="row" style="background: #f2f2f2;"><div class="col-sm-6 text-left"><b>Komentar Oleh : ' +
-                        pro.name + '</b><p><small>Tanggal komentar : ' + pro.created_at +
-                        '</small></p></div><div class="col-sm-6 text-right div-auth-' + pro
-                        .id_komentar + '"><button koment-id="' + pro.id_komentar +
-                        '" class="btn btn-sm btn-danger btn-remove-komentar"><i class="fa fa-trash"></i></button></div></div><hr> ' +
-                        pro.komentar + ' </div><br>'
+                        `<div class="col-sm-12" style="border: 1px #ebebeb solid;border-radius: 5px;padding: 15px;"> 
+                            <div class="row form-group" style="background: #f2f2f2;">
+                                <div class="col-sm-6 text-left"><b>Komentar Oleh : ` + pro.name + `</b>
+                                    <p><small>Tanggal komentar : ` + pro.created_at + `</small></p>
+                                </div>
+                                <div class="col-sm-6 text-right div-auth-` + pro.id_komentar + `">
+                                    <button koment-id="` + pro.id_komentar + `" class="btn btn-sm btn-danger btn-remove-komentar"><i class="fa fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div> 
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label class="form-label">Rating Barang : &nbsp;&nbsp;</label>
+                                    <span class="` + (pro.rating > 1 ? ' checked-rating' : '') + ` fa fa-star"></span>
+                                    <span class="` + (pro.rating > 2 ? ' checked-rating' : '') + ` fa fa-star"></span>
+                                    <span class="` + (pro.rating > 3 ? ' checked-rating' : '') + ` fa fa-star"></span>
+                                    <span class="` + (pro.rating > 4 ? ' checked-rating' : '') + ` fa fa-star"></span>
+                                    <span class="` + (pro.rating > 5 ? ' checked-rating' : '') + ` fa fa-star"></span>
+                                </div>
+                                <div class="col-sm-12">
+                                    ` + pro.komentar + `
+                                </div>
+                            </div>
+                        </div><br>`
                     $('.row-komentar').append(template)
                     if (id_user != pro.id_user) {
                         $('.div-auth-' + pro.id_komentar).remove();
@@ -300,6 +346,8 @@
                 })
                 var total_komentar = response.data.length;
                 $('.total-komentar').text('(' + total_komentar + ')');
+                $('.rating').removeClass('checked-rating')
+                $('.rating-val').val('0')
             },
             error: function (error) {
                 console.log(error)

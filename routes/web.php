@@ -16,7 +16,6 @@ use App\Http\Controllers\DaftarPembeliController;
 use App\Http\Controllers\UserController; 
 use App\Http\Controllers\LaporanPenjualanController; 
 
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -27,6 +26,16 @@ use App\Http\Controllers\LaporanPenjualanController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::get('notifikasi', function () {
+    $data = DB::table('transaksi')
+    ->leftjoin('users', 'users.id', 'transaksi.id_user_pembeli')
+    ->select('transaksi.*','users.name')
+    ->where('id_status',3)->get();
+	event(new App\Events\StatusLiked($data));
+	return "Event has been sent!";
+});
+
 
 Route::get('/seafood', function () {
      return view('front.dashboard');
@@ -75,7 +84,9 @@ Route::controller(PesananController::class)->group(function(){
     Route::get('pesanan/detail/{id_pesanan}', 'show')->name('pesanan.detail');
     Route::post('pesanan/destroyTransaksi/{id_pesanan}', 'destroyTransaksi')->name('pesanan.destroyTransaksi');
     Route::post('pesanan/proses/cekout', 'store')->name('pesanan.store');
+    Route::post('pesanan/diterima', 'terimaPensanan')->name('terimaPensanan.store');
     Route::post('pesanan/update', 'update')->name('pesanan.update');
+
 
 });
 Route::controller(PageShopController::class)->group(function(){

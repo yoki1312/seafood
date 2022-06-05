@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use DataTables;
 use DB;
 use Auth;
+use App\Events\StatusLiked;
 
 class PesananController extends Controller
 {
@@ -19,11 +20,11 @@ class PesananController extends Controller
         if($request->ajax()){
             $data = DB::table('keranjang_temporary as ta')
             ->leftjoin('master_barang as tb', 'tb.id_barang','ta.id_barang')
-            ->leftJoin(DB::raw('(select sum(ta.qty) as qty_stock, ta.id_barang from detail_transaksi ta INNER JOIN transaksi tc on tc.id_transaksi = ta.id_transaksi where tc.id_status in (0,2) GROUP BY ta.id_barang) tz'), function($join){
+            ->leftJoin(DB::raw('(select sum(ta.qty) as qty_stock, ta.id_barang from detail_transaksi ta INNER JOIN transaksi tc on tc.id_transaksi = ta.id_transaksi where tc.id_status in (0,2,4) GROUP BY ta.id_barang) tz'), function($join){
                 $join->on('tz.id_barang' ,'=' ,'ta.id_barang');
             })
             ->leftJoin('detail_transaksi as tx', function($join) {
-                $join->leftjoin('transaksi as ti', 'ti.id_transaksi','tx.id_transaksi')->on('ta.id_barang','tx.id_barang')->where('ti.id_jenis_transaksi',1)->whereIn('ti.id_status',[0,2]);
+                $join->leftjoin('transaksi as ti', 'ti.id_transaksi','tx.id_transaksi')->on('ta.id_barang','tx.id_barang')->where('ti.id_jenis_transaksi',1)->whereIn('ti.id_status',[0,2,4]);
               })
             ->leftjoin('admins as td','td.id','tb.id_supplier')
             ->select(DB::raw('ta.qty, tb.*, tz.qty_stock sisa_stock, td.name as nama_toko, ta.id_temporary'))
@@ -68,8 +69,10 @@ class PesananController extends Controller
                                $btn .= ' <button type="button" data-id="'. $row->id_transaksi .'" class=" btn btn-danger btn-sm btn-hapus-pesanan">Batal Pesanan</button>';
                                $btn .= ' <a href="'. url('pesanan/detail/' . $row->id_transaksi) .'"  class=" btn btn-info btn-cekout btn-sm">Bayar Pesanan</a>';
                         }else{
-                            $btn .= ' <a href="'. url('pesanan/detail/' . $row->id_transaksi) .'"  class=" btn btn-success btn-cekout btn-sm">Detail Pesanan</a>';
-
+                            $btn .= ' <a href="'. url('pesanan/detail/' . $row->id_transaksi) .'"  class=" btn btn-success btn-cekout btn-sm">Detail Pesanan</a>';    
+                        }
+                        if($row->id_status == 2){
+                            $btn .= ' <button type="button" data-id-transaksi="'. $row->id_transaksi .'"  class=" btn btn-secondary btn-terima-pesanan btn-sm">Terima Pesanan</button>';
                         }
                         //    $btn .= ' <a href="javascript:void(0)" class=" btn btn-info btn-un-cekout btn-sm" style="display:none">Batal</a>';
     
@@ -219,6 +222,11 @@ class PesananController extends Controller
             'nomor_hp' => $request->nomor_hp,
             'file'  => $fileName
         ]);
+        
+        $data = DB::table('transaksi')
+        ->leftjoin('users', 'users.id', 'transaksi.id_user_pembeli')
+        ->where('id_status',3)->get();
+        event(new StatusLiked($data));
         return redirect('/seafood');
         // dd($request->all());
     }
@@ -249,5 +257,27 @@ class PesananController extends Controller
               'message' => 'Data inserted successfully'
             ]
        );
+    }
+    public function terimaPensanan(Request $request){
+        DB::table('transaksi')->where('id_transaksi',$request->id_transaksi)->update([
+            'id_status'=> 4,
+            'rating'=> $request->rating,
+            'note_penerima' => $request->keterangan,
+            'updated_at'    => date('Y-m-d H:i:s'),
+        ]);
+
+        $getBarang = DB::table('detail_transaksi')->where('id_transaksi', $request->id_transaksi)->get();
+        foreach($getBarang as $s){
+            $cek = DB::table('komentar_produk')->where('id_barang', $s->id_barang)->insert([
+                'id_barang' => $s->id_barang,
+                'id_user' => Auth::user()->id,
+                'komentar'  => $request->keterangan,
+                'rating'    => $request->rating,
+                'updated_at'    => date('Y-m-d H:i:s'),
+                'created_at'    => date('Y-m-d H:i:s')
+            ]);
+        }
+
+        return view('front.cekout');
     }
 }

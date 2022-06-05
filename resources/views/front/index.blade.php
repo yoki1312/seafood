@@ -33,7 +33,11 @@
     <meta name="id_user" content="{{ Auth::user()->id }}" />
     @endif
 </head>
-
+<style>
+    .checked-rating {
+        color: orange;
+        }
+</style>
 <body>
     <!-- Page Preloder -->
     <div id="preloder">
@@ -74,7 +78,7 @@
         </div>
         <nav class="humberger__menu__nav mobile-menu">
         <ul>
-                            <li class="home-li"><a href="{{ url('seafood') }}">Home</a></li>
+                            <li class="home-li"><a href="{{ url('seafood') }}">Dashboard</a></li>
                             <li class="shop-li"><a href="{{ route('shop.index')}}">Produk</a></li>
                             @if(isset(Auth::user()->id ))
                             <li class="pembelian-li"><a href="#">Pembelian</a>
@@ -84,7 +88,7 @@
                                 </ul>
                             </li>
                             @endif
-                            <li class="contact-li"><a href="{{ url('contact-us') }}">Contact</a></li>
+                            <li class="contact-li"><a href="{{ url('contact-us') }}">Tentang Kami</a></li>
                         </ul>
         </nav>
         <div id="mobile-menu-wrap"></div>
@@ -166,7 +170,7 @@
                                 </ul>
                             </li>
                             @endif
-                            <li class="contact-li"><a href="{{ url('contact-us') }}">Contact</a></li>
+                            <li class="contact-li"><a href="{{ url('contact-us') }}">Tentang Kami</a></li>
                         </ul>
                     </nav>
                 </div>

@@ -102,6 +102,7 @@ class BackEndPesananController extends Controller
             'id_barang' => $request->id_barang,
             'id_user'   => Auth::user()->id,
             'komentar'  => $request->komentar,
+            'rating'    => $request->rating,
             'created_at'    => date('Y-m-d H:i:s'),
             'updated_at'    => date('Y-m-d H:i:s'),
         ]);
@@ -174,11 +175,11 @@ class BackEndPesananController extends Controller
         $data = DB::table('master_barang as ta')
         ->leftjoin('admins as tb', 'tb.id', 'ta.id_supplier')
         ->leftjoin('master_kategori_seafood as tc', 'tc.id_kategori_seafood','ta.id_kategori')
-        ->leftJoin(DB::raw('(select sum(ta.qty) as qty_stock, ta.id_barang from detail_transaksi ta INNER JOIN transaksi tc on tc.id_transaksi = ta.id_transaksi where tc.id_status in (0,2) GROUP BY ta.id_barang) tz'), function($join){
+        ->leftJoin(DB::raw('(select sum(ta.qty) as qty_stock, ta.id_barang from detail_transaksi ta INNER JOIN transaksi tc on tc.id_transaksi = ta.id_transaksi where tc.id_status in (0,2,4) GROUP BY ta.id_barang) tz'), function($join){
             $join->on('tz.id_barang' ,'=' ,'ta.id_barang');
         })
         ->leftJoin('detail_transaksi as tx', function($join) {
-            $join->leftjoin('transaksi as ti', 'ti.id_transaksi','tx.id_transaksi')->on('ta.id_barang','=','tx.id_barang')->where('ti.id_jenis_transaksi',1)->whereIn('ti.id_status',[0,2]);
+            $join->leftjoin('transaksi as ti', 'ti.id_transaksi','tx.id_transaksi')->on('ta.id_barang','=','tx.id_barang')->where('ti.id_jenis_transaksi',1)->whereIn('ti.id_status',[0,2,4]);
           })
         ->where('ta.id_barang', $id)
         ->select(DB::RAW('tz.qty_stock as stock, ta.*, tb.*, tc.*, sum(tx.qty) terjual'))

@@ -34,7 +34,32 @@
     <link rel="stylesheet" href="{{ asset('assetAdmin/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assetAdmin/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assetAdmin/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
+    <script src="//js.pusher.com/3.1/pusher.min.js"></script>
+    <script type="text/javascript">
+        
+        var pusher = new Pusher('103515b1ffc110198444', {
+            cluster: 'ap1',
+            encrypted: true
+        });
 
+	  // Subscribe to the channel we specified in our Laravel Event
+	  var channel = pusher.subscribe('status-liked');
+
+	  // Bind a function to a Event (the full Laravel class)
+	  channel.bind('App\\Events\\StatusLiked', function(data) {
+            var dt = data.message;
+           $('.class-notif').empty();
+           $('.total-data').text(dt.length);
+           dt.forEach((pro)=>{
+               var link = "{{ url('') }}" + '/laporan_penjualan/detail/' + pro.id_transaksi;
+               var template = `<a href="` + link + `" class="dropdown-item">
+               <i class="fas fa-envelope mr-2"></i> `+ pro.name +`
+                <span class="float-right text-muted text-sm">Pembayaran Transaksi`+ pro.kode_transaksi +`</span>
+               </a>`
+               $('.class-notif').append(template);
+            })
+	  });
+	</script>
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <meta name="url" content="{{ url('') }}" />
 </head>
@@ -154,25 +179,13 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link" data-toggle="dropdown" href="#">
                         <i class="far fa-bell"></i>
-                        <span class="badge badge-warning navbar-badge">15</span>
+                        <span class="badge badge-warning navbar-badge total-data">15</span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                        <span class="dropdown-item dropdown-header">15 Notifications</span>
+                        <span class="dropdown-item dropdown-header"><span class="total-data"></span> Notifications</span>
                         <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
-                            <i class="fas fa-envelope mr-2"></i> 4 new messages
-                            <span class="float-right text-muted text-sm">3 mins</span>
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
-                            <i class="fas fa-users mr-2"></i> 8 friend requests
-                            <span class="float-right text-muted text-sm">12 hours</span>
-                        </a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
-                            <i class="fas fa-file mr-2"></i> 3 new reports
-                            <span class="float-right text-muted text-sm">2 days</span>
-                        </a>
+                        <div class="class-notif"></div>
+                        
                         <div class="dropdown-divider"></div>
                         <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
                     </div>
@@ -1011,6 +1024,7 @@
     <script src="{{ asset('assetAdmin/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
     <script src="{{ asset('assetAdmin/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
     <script src="{{ asset('accounting.min.js') }}"></script>
+  
     <script>
         var _url =  $('meta[name="url"]').attr('content')
         $(document).ready(function () {
@@ -1019,9 +1033,23 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+            notif();
         })
         function renderRp(nilai, decimal) {
             return accounting.formatNumber(nilai, decimal, " ");
+        }
+
+        function notif(){
+            var url = '{{ url("notifikasi") }}';
+            $.ajax({
+                url: url,
+                method: 'get',
+                success: function (response) {
+                },
+                error: function (error) {
+                    console.log(error)
+                }
+            });
         }
 
     </script>

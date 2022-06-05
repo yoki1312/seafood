@@ -9,6 +9,8 @@
                     <div class="breadcrumb__option">
                         <a href="./index.html">Home</a>
                         <span>Daftar Pesanan</span>
+                        <button type="button" class="btn btn-primary" data-toggle="modal"
+                            data-target=".bd-example-modal-lg">Large modal</button>
                     </div>
                 </div>
             </div>
@@ -45,10 +47,64 @@
     </form>
 </section>
 
+<div class="modal fade bd-example-modal-lg" id="modal-transaksi" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <form method="post" action="{{ url('pesanan/diterima') }}" enctype="multipart/form-data">
+        @csrf
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-12 text-center">
+                        <label class="form-label">Rating Barang</label><br>
+                        <span data-star="1" class="rating fa fa-star"></span>
+                        <span data-star="2" class="rating fa fa-star"></span>
+                        <span data-star="3" class="rating fa fa-star"></span>
+                        <span data-star="4" class="rating fa fa-star"></span>
+                        <span data-star="5" class="rating fa fa-star"></span>
+                        <hr>
+                    </div>
+                    <input type="hidden" class="rating-val" name="rating" value="0" />
+                    <input type="hidden" class="id_transaksi" name="id_transaksi" value="0" />
+                    <div class="col-sm-12">
+                        <label class="form-label">Tambah Keterangan</label>
+                        <textarea name="keterangan" id="text-komentar"></textarea>
+                        <hr>
+                    </div>
+                    <div class="col-sm-12 text-right">
+                    <button type="button" class="btn btn-sm btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-sm btn-success">Simpan</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </form>
+</div>
 @endsection
 @section('js')
 <script>
     $(document).ready(function () {
+
+        $(document).on('click','.btn-terima-pesanan', function(){
+            let id_transaksi = $(this).attr('data-id-transaksi');
+            $('#modal-transaksi').find('.id_transaksi').val(id_transaksi);
+            $('#modal-transaksi').modal('show');
+        })
+
+        $(document).on('click', '.rating', function(){
+            let index = $(this).attr('data-star');
+            let ratingStart = 1;
+            $('.rating').removeClass('checked-rating')
+            for(i=ratingStart; i<=index; i++){
+                $("[data-star='" + i + "']").addClass('checked-rating')
+            }
+            $('.rating-val').val(index)
+        })
+        $('#text-komentar').summernote({
+            toolbar: [
+                ['insert', ['picture']],
+            ],
+        });
         var url = "{{ asset('produk/') }}"
         var table = $('.tb-barang').DataTable({
             processing: true,
@@ -87,7 +143,7 @@
                         if (row.id_status == 1) {
                             elm += '<span class="badge badge-info">' + row.nama_status +
                                 '</span>';
-                        }else{
+                        } else {
 
                             elm += '<span class="badge badge-success">' + row.nama_status +
                                 '</span>';
@@ -116,16 +172,17 @@
                 confirmButtonText: 'Batalkan !'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    $.post("{{ url('/pesanan/destroyTransaksi/') }}" + '/' + id_transaksi, function (data) {
-                        if (data.success == true) {
-                            Swal.fire(
-                                'Berhasil!',
-                                'Pesanan berhasil dihapus.',
-                                'success'
-                            );
-                            table.ajax.reload(null, true)
-                        }
-                    });
+                    $.post("{{ url('/pesanan/destroyTransaksi/') }}" + '/' + id_transaksi,
+                        function (data) {
+                            if (data.success == true) {
+                                Swal.fire(
+                                    'Berhasil!',
+                                    'Pesanan berhasil dihapus.',
+                                    'success'
+                                );
+                                table.ajax.reload(null, true)
+                            }
+                        });
                 }
             })
         })

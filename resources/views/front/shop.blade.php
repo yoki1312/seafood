@@ -22,18 +22,21 @@
                 <div class="sidebar">
                     <div class="sidebar__item">
                         <h4>Cari berdasarkan Kategori</h4>
-                        <div class="sidebar__item__size">
-                            <button data-id="0" class="btn btn-sm btn-light btn-filter-kategori">
-                            Tampilkan Semua 
-                            </button>
+                        <div class="row">
+                            <div class="col-sm-6 form-group">
+                                <button data-id="0" class="btn btn-sm btn-light btn-filter-kategori">
+                                Tampilkan Semua 
+                                </button>
+                            </div>
+                            @foreach(sliderKategori() as $k)
+                            <div class="col-sm-6 form-group">
+                                <button data-id="{{ $k->id_kategori_seafood }}" class="btn btn-sm btn-light btn-filter-kategori">
+                                {{ $k->nama_kategori }}
+                                </button>
+                            </div>
+                            @endforeach
                         </div>
-                        @foreach(sliderKategori() as $k)
-                        <div class="sidebar__item__size">
-                            <button data-id="{{ $k->id_kategori_seafood }}" class="btn btn-sm btn-light btn-filter-kategori">
-                            {{ $k->nama_kategori }}
-                            </button>
-                        </div>
-                        @endforeach
+                      
                     </div>
                 </div>
             </div>
