@@ -25,7 +25,7 @@
             <div class="col-lg-6 col-md-6">
                 <div class="product__details__pic">
                     <div class="product__details__pic__item">
-                        <img class="product__details__pic__item--large" style="max-height: 550px;"
+                        <img class="product__details__pic__item--large" style="padding: 111px;max-height: 607px;background: aliceblue;"
                             src="{{ asset('produk/'. $data->file_sampul) }}" alt="">
 
                     </div>

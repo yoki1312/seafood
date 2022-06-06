@@ -54,8 +54,7 @@
                var link = "{{ url('') }}" + '/laporan_penjualan/detail/' + pro.id_transaksi;
                var template = `<a href="` + link + `" class="dropdown-item">
                <i class="fas fa-envelope mr-2"></i> `+ pro.name +`
-                <span class="float-right text-muted text-sm">Pembayaran Transaksi`+ pro.kode_transaksi +`</span>
-               </a>`
+                <br>&nbsp;Pembayaran `+ pro.kode_transaksi +`</a>`
                $('.class-notif').append(template);
             })
 	  });
@@ -95,12 +94,12 @@
                         <span class="badge badge-warning navbar-badge total-data">15</span>
                     </a>
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-                        <span class="dropdown-item dropdown-header"><span class="total-data"></span> Notifications</span>
+                        <span class="dropdown-item dropdown-header"><span class="total-data"></span> Pemberitahuan</span>
                         <div class="dropdown-divider"></div>
                         <div class="class-notif"></div>
                         
                         <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
+                        <a href="{{ route('lappenjualan.index') }}" class="dropdown-item dropdown-footer">Lihat Semua Transaksi</a>
                     </div>
                 </li>
                 <li class="nav-item">

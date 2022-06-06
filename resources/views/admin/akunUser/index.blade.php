@@ -23,14 +23,6 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="card">
-                    <div class="card-header">
-                        <div class="row">
-
-                            <div class="col-sm-12 text-left">
-                                <a href="{{ route('user.create') }}" class="btn btn-sm btn-success">Tambah baru</a>
-                            </div>
-                        </div>
-                    </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-sm-12 form-group">

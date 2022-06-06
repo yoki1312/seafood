@@ -49,7 +49,7 @@
             @foreach(getProduk() as $r)
             <div class="col-lg-3 col-md-4 col-sm-6 mix oranges fresh-meat">
                 <div class="featured__item">
-                    <div class="featured__item__pic set-bg" data-setbg="{{ asset('produk/'. $r->file_sampul) }}">
+                    <div class="featured__item__pic set-bg" style=" position: relative; overflow: hidden; padding: 40px; background-color: whitesmoke; background-repeat: no-repeat; background-origin: content-box;" data-setbg="{{ asset('produk/'. $r->file_sampul) }}">
                         <ul class="featured__item__pic__hover">
                             <!-- <li><a href="#"><i class="fa fa-heart"></i></a></li>
                             <li><a href="#"><i class="fa fa-retweet"></i></a></li> -->

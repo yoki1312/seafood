@@ -26,6 +26,9 @@ class PageShopController extends Controller
         if($request->id_kategori != 0){
             $res->where('ta.id_kategori', $request->id_kategori);
         }
+        if($request->nama_barang != '0'){
+            $res->where('ta.nama_barang','like', '%'.$request->nama_barang.'%')->get();
+        }
         $res->groupby('ta.id_barang');
         if($request->sorting==2){
             $res->orderByRaw('sum(tx.qty) DESC');
@@ -36,10 +39,11 @@ class PageShopController extends Controller
         }
 
         $res->get();
-        $data = $res->paginate(8);
+        $data = $res->paginate(9);
         // dd($data['total']);
         $total_data = DB::table('master_barang')->count();
         if($request->ajax()){
+            // dd($request->nama_barang);
             return view('front.child_shop',compact('data', 'total_data'))->render();
         }
         return view('front.shop',compact('data', 'total_data'));

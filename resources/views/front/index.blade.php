@@ -7,7 +7,7 @@
     <meta name="keywords" content="Ogani, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Ogani | Template</title>
+    <title>Serba Serbi Ujungpangkah</title>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap" rel="stylesheet">
@@ -27,7 +27,8 @@
     <link rel="stylesheet"
         href="{{ asset('assetAdmin/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assetAdmin/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
-
+    <link rel="stylesheet" href="{{ asset('assetAdmin/css/fileinput.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assetAdmin/css/toastr.min.css') }}">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     @if(isset(Auth::user()->id))
     <meta name="id_user" content="{{ Auth::user()->id }}" />
@@ -36,8 +37,10 @@
 <style>
     .checked-rating {
         color: orange;
-        }
+    }
+
 </style>
+
 <body>
     <!-- Page Preloder -->
     <div id="preloder">
@@ -64,32 +67,34 @@
                 <div>{{ Auth::user()->name }}</div>
                 <span class="arrow_carrot-down"></span>
                 <ul>
-                    <li><a href="#">Edit Profil</a></li>
+                    <li><a href="{{ url('detail/user') }}">Edit Profil</a></li>
                     <li> <a class="dropdown-item" href="{{ url('logout/user') }}">
                             {{ __('Logout') }}
                         </a></li>
                 </ul>
-             
+
                 @else
-                <a href="{{ url('login/pembeli') }}"><i class="fa fa-user"></i> Login</a>
+                <a type="button" data-toggle="modal" data-target="#modal-login"> Login </a>
+                <!-- <a href="{{ url('login/pembeli') }}"><i class="fa fa-user"></i> Login</a> -->
 
                 @endif
             </div>
         </div>
         <nav class="humberger__menu__nav mobile-menu">
-        <ul>
-                            <li class="home-li"><a href="{{ url('seafood') }}">Dashboard</a></li>
-                            <li class="shop-li"><a href="{{ route('shop.index')}}">Produk</a></li>
-                            @if(isset(Auth::user()->id ))
-                            <li class="pembelian-li"><a href="#">Pembelian</a>
-                                <ul class="header__menu__dropdown">
-                                    <li class="pembelian-li"><a href="{{ route('pesanan.index')}}">Keranjang Saya</a></li>
-                                    <li class="pembelian-li"><a href="{{ route('riwayatPesanan.index') }}">Riwayat Pembelian</a></li>
-                                </ul>
-                            </li>
-                            @endif
-                            <li class="contact-li"><a href="{{ url('contact-us') }}">Tentang Kami</a></li>
-                        </ul>
+            <ul>
+                <li class="home-li"><a href="{{ url('seafood') }}">Dashboard</a></li>
+                <li class="shop-li"><a href="{{ route('shop.index')}}">Produk</a></li>
+                @if(isset(Auth::user()->id ))
+                <li class="pembelian-li"><a href="#">Pembelian</a>
+                    <ul class="header__menu__dropdown">
+                        <li class="pembelian-li"><a href="{{ route('pesanan.index')}}">Keranjang Saya</a></li>
+                        <li class="pembelian-li"><a href="{{ route('riwayatPesanan.index') }}">Riwayat Pembelian</a>
+                        </li>
+                    </ul>
+                </li>
+                @endif
+                <li class="contact-li"><a href="{{ url('contact-us') }}">Tentang Kami</a></li>
+            </ul>
         </nav>
         <div id="mobile-menu-wrap"></div>
         <div class="header__top__right__social">
@@ -134,14 +139,15 @@
                                 <div>{{ Auth::user()->name }}</div>
                                 <span class="arrow_carrot-down"></span>
                                 <ul>
-                                    <li><a href="#">Edit Profil</a></li>
+                                    <li><a href="{{ url('detail/user') }}">Edit Profil</a></li>
                                     <li> <a class="dropdown-item" href="{{ url('logout/user') }}">
-                            {{ __('Logout') }}
-                        </a></li>
+                                            {{ __('Logout') }}
+                                        </a></li>
                                 </ul>
                                 @else
-                                <a href="{{ url('login/pembeli') }}"><i class="fa fa-user"></i> Login</a>
-
+                                <!-- <a href="{{ url('login/pembeli') }}"><i class="fa fa-user"></i> Login</a> -->
+                                <a type="button" data-toggle="modal" data-target="#modal-login"><small><i
+                                            class="fa fa-user"></i> Login</small> </a>
                                 @endif
                             </div>
 
@@ -150,6 +156,7 @@
                 </div>
             </div>
         </div>
+
         <div class="container">
             <div class="row">
                 <div class="col-lg-3">
@@ -165,8 +172,10 @@
                             @if(isset(Auth::user()->id ))
                             <li class="pembelian-li"><a href="#">Pembelian</a>
                                 <ul class="header__menu__dropdown text-left">
-                                    <li class="pembelian-li"><a href="{{ route('pesanan.index')}}">Keranjang Saya</a></li>
-                                    <li class="pembelian-li"><a href="{{ route('riwayatPesanan.index') }}">Riwayat Pembelian</a></li>
+                                    <li class="pembelian-li"><a href="{{ route('pesanan.index')}}">Keranjang Saya</a>
+                                    </li>
+                                    <li class="pembelian-li"><a href="{{ route('riwayatPesanan.index') }}">Riwayat
+                                            Pembelian</a></li>
                                 </ul>
                             </li>
                             @endif
@@ -206,7 +215,8 @@
                         <ul
                             style="display: none;position: absolute; left: 0; top: 46px; width: 100%; z-index: 9; background: #ffffff;">
                             @foreach(sliderKategori() as $l)
-                            <li><a href="{{ 's' }}">{{ $l->nama_kategori }}</a></li>
+                            <li><a type="button" onclick="setGlobalKategoriFilter(this)"
+                                    data-id="{{ $l->id_kategori_seafood }}">{{ $l->nama_kategori }}</a></li>
                             @endforeach
                         </ul>
                     </div>
@@ -216,8 +226,9 @@
                         <div class="hero__search__form">
                             <form action="#">
 
-                                <input type="text" placeholder="What do yo u need?">
-                                <button type="submit" class="site-btn">SEARCH</button>
+                                <input type="text" class="filter-nama-global" placeholder="Tampilkan Semua Barang">
+                                <button type="button" onclick="setGlobalNamaFilter()" class="site-btn">Cari
+                                    Barang</button>
                             </form>
                         </div>
                         <div class="hero__search__phone">
@@ -226,7 +237,7 @@
                             </div>
                             <div class="hero__search__phone__text">
                                 <h5>+65 11.188.888</h5>
-                                <span>support 24/7 time</span>
+                                <span>Layanan 08:00 - 16:00</span>
                             </div>
                         </div>
                     </div>
@@ -238,7 +249,91 @@
     <!-- Hero Section End -->
     @section('front')
     @show
+    <div class="modal fade" id="modal-login" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12" style="padding-left: 32px;padding-right: 32px;padding-top: 25px;">
+                        <form method="POST" action="{{ route('login') }}">
+                                @csrf
+                                <div class="form-group text-center">
+                                    <img style="max-width: 70%;" src="{{ asset('assetFront/img/logo.png') }}" alt="">
+                                <hr>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Email address</label>
+                                    <input type="email" class="form-control" name="email" id="exampleInputEmail1"
+                                        aria-describedby="emailHelp" placeholder="Enter email">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputPassword1">Password</label>
+                                    <input type="password" name="password" class="form-control" id="exampleInputPassword1"
+                                        placeholder="Password">
+                                </div>
+                                <div class="form-group text-right">
+                                    <p class="text-center">Belum punya akun ?  <a class="modal-register" type="button"> <i class="fa fa-user"></i> Register</a></p>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                                    <button type="submit" class="btn btn-primary">Login</button>
+                                  
+                                </div>
+                                </form>
+                        </div>
 
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modal-register" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12" style="padding-left: 32px;padding-right: 32px;padding-top: 25px;">
+                        <form method="POST" action="{{ route('register') }}">
+                                @csrf
+                                <div class="form-group text-center">
+                                    <img style="max-width: 70%;" src="{{ asset('assetFront/img/logo.png') }}" alt="">
+                                <hr>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Nama Lengkap</label>
+                                    <input type="text" class="form-control" name="name" id="exampleInputEmail1"
+                                        aria-describedby="emailHelp" placeholder="Nama Lengkap">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Alamat Email</label>
+                                    <input type="email" class="form-control" name="email" id="exampleInputEmail1"
+                                        aria-describedby="emailHelp" placeholder="Alamat email">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputPassword1">Password</label>
+                                    <input type="password" name="password" class="form-control" id="exampleInputPassword1"
+                                        placeholder="Password">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputPassword1">Confirm Password</label>
+                                    <input placeholder="Confirm Password" type="password" id="password-confirm" class="form-control" name="password_confirmation" required autocomplete="new-password" />
+                                </div>
+                                <div class="form-group text-right">
+                                    <p class="text-center">Daftar sebagai penjual ?  <a href="{{ url('register/supplier') }}"> <i class="fa fa-user"></i> Register</a></p>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                                    <button type="submit" class="btn btn-primary">Daftar</button>
+                                  
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
     <!-- Footer Section Begin -->
     <footer class="footer spad">
         <div class="container">
@@ -338,7 +433,8 @@
     <script src="{{ asset('assetAdmin/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
     <script src="{{ asset('assetAdmin/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
     <script src="{{ asset('assetAdmin/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
-   
+    <script src="{{ asset('assetAdmin/js/fileinput.min.js') }}"></script>
+    <script src="{{ asset('assetAdmin/js/toastr.min.js') }}"></script>
     <script>
         $(document).ready(function () {
             $.ajaxSetup({
@@ -351,16 +447,41 @@
             })
             var active = localStorage.getItem("linkActive");
             $('.' + active).addClass('active')
+            if (localStorage.getItem("setGlobalNamaFilter") != '') {
+                var nama_search = localStorage.getItem("setGlobalNamaFilter");
+                $('.filter-nama-global').val(nama_search)
+            }
+
+            $(document).on('click','.modal-register',function(){
+                $('#modal-login').modal('hide');
+                $('#modal-register').modal('show');
+            })
 
         })
 
         function renderRp(nilai, decimal) {
             return accounting.formatNumber(nilai, decimal, " ");
         }
+
+        function setGlobalKategoriFilter(val) {
+            let id_kategori = $(val).attr('data-id');
+            localStorage.setItem("filterKateoriGlobal", id_kategori);
+            window.location.href = "{{ url('shop') }}"
+        }
+
+        function setGlobalNamaFilter() {
+            var nama = $('.filter-nama-global').val();
+            if (nama != '') {
+                localStorage.setItem("setGlobalNamaFilter", nama);
+            } else {
+                localStorage.setItem("setGlobalNamaFilter", '');
+            }
+            window.location.href = "{{ url('shop') }}"
+        }
         var id_user = $('meta[name="id_user"]').attr('content');
 
     </script>
-
+ @toastr_render
     @yield('js')
 
 

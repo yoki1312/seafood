@@ -7,7 +7,7 @@ use DataTables;
 use App\Models\User;
 use DB;
 use Auth;
-
+use Hash;
 class UserController extends Controller
 {
     /**
@@ -26,13 +26,16 @@ class UserController extends Controller
           return DataTables::of($data)
                   ->addIndexColumn()
                   ->addColumn('action', function($row){
-                      $actionBtn = '<a href="javascript:void(0)" class="edit btn btn-success btn-sm btn-edit">Edit</a> <a type="button"  class="delete btn btn-danger btn-sm btn-hapus">Delete</a>';
+                    $actionBtn = '';
+                    $actionBtn .= '<a href="'. route('akunUser.show',['id_user' => $row->id]) .'" class="edit btn btn-success btn-sm">Detail</a> ';
+                    $actionBtn .= '<a href="'. route('akunUser.edit',['id_user' => $row->id]) .'" class="edit btn btn-info btn-sm">Edit</a> ';
+                    $actionBtn .= '<a href="'. route('akunUser.destroy',['id_user' => $row->id]) .'" class="edit btn btn-danger btn-sm">Hapus</a> ';
                       return $actionBtn;
                   })
                   ->rawColumns(['action'])
                   ->make(true);
         }
-        return view('admin.users.index');
+        return view('admin.akunUser.index');
     }
 
     /**
@@ -64,7 +67,8 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        $data = DB::table('users')->where('id', $id)->first();
+        return view('admin.akunUser.detail', compact('data'));
     }
 
     /**
@@ -75,7 +79,8 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        $data = DB::table('users')->where('id', $id)->first();
+        return view('admin.akunUser.edit', compact('data'));
     }
 
     /**
@@ -85,9 +90,26 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $data = DB::table('users')->where('id', $request->id_user)->first();
+        $fileName = $data->foto_profile;
+        if($request->file('file')){
+            $r = $request->file('file');
+            $fileName = 'foto-'.time()."_". str_replace(' ','_', $request->name);
+            $r->move(public_path().'/foto-user', $fileName);
+        }
+
+        DB::table('users')->where('id', $request->id_user)->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'nomor_wa' => $request->nomor_wa,
+            'alamat' => $request->alamat,
+            'foto_profile' => $fileName,
+            'password' => !empty($request->password) ? Hash::make($request->password) : $data->password ,
+        ]);
+        toastr()->success('Akun berhasil di perbarui ', 'Berhasil!');
+        return redirect()->back();
     }
 
     /**
@@ -98,6 +120,8 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        DB::table('users')->where('id', $id)->delete();
+        toastr()->success('Akun berhasil di hapus ', 'Berhasil!');
+        return redirect()->back();
     }
 }

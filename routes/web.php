@@ -51,6 +51,9 @@ Route::get('/', function () {
 Route::get('/contact-us', function () {
      return view('front.contact-us');
 });
+Route::get('detail/user', function () {
+     return view('front.detail-profile');
+});
 Route::get('login/supplier', function () {
     return view('admin.login_supplier');
 });
@@ -235,6 +238,11 @@ Route::controller(UserController::class)->group(function(){
     Route::get('user', 'index')->name('user.index');
     Route::get('user/create', 'create')->name('user.create');
     Route::post('user/store', 'store')->name('user.store');
+    Route::post('user/update', 'update')->name('user.update');
+
+    Route::get('user/edit/{id_user}', 'edit')->name('akunUser.edit');
+    Route::get('user/detail/{id_user}', 'show')->name('akunUser.show');
+    Route::get('user/destroy/{id_user}', 'destroy')->name('akunUser.destroy');
 
 });
 

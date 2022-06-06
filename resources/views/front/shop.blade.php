@@ -56,7 +56,7 @@
                         </div>
                         <div class="col-lg-4 col-md-4">
                             <div class="filter__found">
-                                <h6><span>{{ $total_data }}</span> Produk ditemukan</h6>
+                                <h6><span class="produk-total">{{ $total_data }}</span> Produk ditemukan</h6>
                             </div>
                         </div>
 
@@ -76,7 +76,20 @@
 @section('js')
 <script>
     let page = 1;
-    let id_kategori = 0;
+    
+    let session_kategori_global =  localStorage.getItem("filterKateoriGlobal") || 0;
+    var session_nama_global =  localStorage.getItem("setGlobalNamaFilter") || 0;
+    
+    let id_kategori = session_kategori_global || 0;
+    var nama_barang = session_nama_global || 0;
+
+    if(id_kategori != 0 ){
+        getProduk();
+    }
+    if(nama_barang != 0 ){
+        // console.log(session_nama_global);
+        getProduk();
+    }
     $(document).ready(function () {
         // getProduk()
         $(document).on('click', '.pagination a', function (event) {
@@ -121,6 +134,7 @@
 
         $(document).on('click','.btn-filter-kategori', function(){
             id_kategori = $(this).attr('data-id');
+            localStorage.setItem("filterKateoriGlobal", null);
             getProduk()
         })
     })
@@ -133,9 +147,12 @@
             method: 'GET',
             data: {
                 'sorting': $('.sorting').val(),
-                'id_kategori' : id_kategori
+                'id_kategori' : id_kategori == null ? 0 : id_kategori,
+                'nama_barang' : nama_barang
             },
             success: function (data) {
+                var cl = $(data).find('.product__item__pic').length
+                $('.produk-total').text(cl || 0)
                 $('.section-data').html(data)
             },
             error: function (error) {
