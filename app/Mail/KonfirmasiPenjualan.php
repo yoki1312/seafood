@@ -30,7 +30,7 @@ class KonfirmasiPenjualan extends Mailable
      */
     public function build()
     {
-        return $this->subject('Mail from websitepercobaan.com')
+        return $this->subject('Serba Serbi Ujungpangkah')
                     ->view('emails.email');
     }
 }

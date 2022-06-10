@@ -135,6 +135,22 @@ class LaporanPenjualanController extends Controller
             'id_status' => 2
         ]);
 
+        $getTransaksi = DB::table('detail_transaksi as ty')
+        ->leftjoin('master_barang as tz', 'tz.id_barang','ty.id_barang')
+        ->leftjoin('admins as tu', 'tu.id','tz.id_supplier')
+        ->select('tu.email','tz.nama_barang')
+        ->where('ty.id_transaksi', $id)
+        ->get();
+
+        $transaksi =  DB::table('transaksi')->where('id_transaksi', $id)->first();
+
+        foreach($getTransaksi as $t){
+            \Mail::to(getContackUs()->email_center)->send(new \App\Mail\KonfirmasiPenjualan(array(
+                'title' => 'Konfirmasi Pembayaran Pesanan',
+                'body' => 'Pembayaran atas transaksi '.$transaksi->kode_transaksi . ' Barang '. $t->nama_barang .' silahkan cek pada menu laporan penjualan'
+            )));
+        }
+
         return redirect()->back();
     }
 }

@@ -4,11 +4,10 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-12">
-                <div class="hero__item set-bg" data-setbg="{{ asset('seafood-image/wp.jpeg') }}">
-                    <div class="hero__text">
-                        <span style="color:white !important;">Seafood Pangkah</span>
-                        <h2 style="color:white !important;">Seafood <br />100% Fresh</h2>
-                        <p style="color:white !important;">Free Pickup and Delivery Available</p>
+                <div class="hero__item set-bg" data-setbg="{{ asset('gambar-dashboard/'. getGambarDashboard()->gambar) }}">
+                    <div class="">
+                        <span style="font-size: 35px;"><b>{{ getGambarDashboard(1)->judul }}</b></span>
+                        <h2 style="color:black !important;">{!! getGambarDashboard(1)->caption !!}</h2>
                         <a href="#" class="primary-btn">SHOP NOW</a>
                     </div>
                 </div>
@@ -16,32 +15,32 @@
         </div>
     </div>
 </section>
-<!-- Categories Section Begin -->
-<section class="categories">
+<!-- Banner Begin -->
+<!-- <div class="banner">
     <div class="container">
         <div class="row">
-            <div class="categories__slider owl-carousel">
-                @foreach(sliderKategori() as $k)
-                <div class="col-lg-3">
-                    <div class="categories__item set-bg"
-                        data-setbg="{{ asset('kategori-image/'. $k->gambar_kategori) }}">
-                        <h5><a href="#">{{ $k->nama_kategori }}</a></h5>
-                    </div>
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="banner__pic">
+                    <img src="{{ asset('gambar-dashboard/'. getGambarDashboard()->gambar_t1) }}" alt="">
                 </div>
-                @endforeach
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="banner__pic">
+                    <img src="{{ asset('gambar-dashboard/'. getGambarDashboard()->gambar_t2) }}" alt="">
+                </div>
             </div>
         </div>
     </div>
-</section>
-<!-- Categories Section End -->
+</div> -->
+<!-- Banner End -->
 
 <!-- Featured Section Begin -->
-<section class="featured spad">
+<section class="featured spad" style="padding-top: 0px !important">
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
                 <div class="section-title">
-                    <h2>Featured Product</h2>
+                    <h2>Produk Tersedia</h2>
                 </div>
             </div>
         </div>
@@ -70,28 +69,16 @@
             </div>
             @endforeach
         </div>
+        <div class="row">
+            <div class="col-sm-12 text-center">
+                <a href="{{ url('shop') }}">Lihat Semua Produk</a>
+            </div>
+        </div>
     </div>
 </section>
 <!-- Featured Section End -->
 
-<!-- Banner Begin -->
-<div class="banner">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-6 col-md-6 col-sm-6">
-                <div class="banner__pic">
-                    <img src="{{ asset('assetFront/img/banner/banner-1.jpg') }}" alt="">
-                </div>
-            </div>
-            <div class="col-lg-6 col-md-6 col-sm-6">
-                <div class="banner__pic">
-                    <img src="{{ asset('assetFront/img/banner/banner-2.jpg') }}" alt="">
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Banner End -->
+
 
 <!-- Latest Product Section Begin -->
 <!-- <section class="latest-product spad">
@@ -298,7 +285,7 @@
 <!-- Latest Product Section End -->
 
 <!-- Blog Section Begin -->
-<section class="from-blog spad">
+<!-- <section class="from-blog spad">
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
@@ -355,7 +342,7 @@
             </div>
         </div>
     </div>
-</section>
+</section> -->
 <!-- Blog Section End -->
 
 @endsection

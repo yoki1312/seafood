@@ -42,6 +42,10 @@ function getContackUs(){
   $data = DB::table('master_contact_us')->first();
   return $data;
 }
+function getGambarDashboard(){
+  $data = DB::table('gambar_dashboard')->first();
+  return $data;
+}
 
 function dataDashboard() {
   $k = new \stdClass();

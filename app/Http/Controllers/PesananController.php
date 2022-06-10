@@ -227,6 +227,11 @@ class PesananController extends Controller
         ->leftjoin('users', 'users.id', 'transaksi.id_user_pembeli')
         ->where('id_status',3)->get();
         event(new StatusLiked($data));
+        \Mail::to(getContackUs()->email_center)->send(new \App\Mail\KonfirmasiPenjualan(array(
+            'title' => 'Konfirmasi Pembayaran Pesanan',
+            'body' => Auth::user()->name . ' melakukan pembayaran atas transaksi '.$transaksi->kode_transaksi . ' silahkan cek pada menu laporan penjualan'
+        )));
+        toastr()->success('pembayaran berhasil, dan admin segera melakukan konfirmasi pembayaran', 'Berhasil!');
         return redirect('/seafood');
         // dd($request->all());
     }
@@ -266,8 +271,14 @@ class PesananController extends Controller
             'updated_at'    => date('Y-m-d H:i:s'),
         ]);
 
-        $getBarang = DB::table('detail_transaksi')->where('id_transaksi', $request->id_transaksi)->get();
-        foreach($getBarang as $s){
+        $getTransaksi = DB::table('detail_transaksi as ty')
+        ->leftjoin('transaksi as tj','tj.id_transaksi', 'ty.id_transaksi')
+        ->leftjoin('master_barang as tz', 'tz.id_barang','ty.id_barang')
+        ->leftjoin('admins as tu', 'tu.id','tz.id_supplier')
+        ->select('tu.email','tz.nama_barang','tz.id_barang','tj.kode_transaksi')
+        ->where('ty.id_transaksi', $request->id_transaksi)
+        ->get();
+        foreach($getTransaksi as $s){
             $cek = DB::table('komentar_produk')->where('id_barang', $s->id_barang)->insert([
                 'id_barang' => $s->id_barang,
                 'id_user' => Auth::user()->id,
@@ -276,8 +287,17 @@ class PesananController extends Controller
                 'updated_at'    => date('Y-m-d H:i:s'),
                 'created_at'    => date('Y-m-d H:i:s')
             ]);
+            \Mail::to(getContackUs()->email_center)->send(new \App\Mail\KonfirmasiPenjualan(array(
+                'title' => 'Konfirmasi pembelian',
+                'body' => 'Transaksi '.$s->kode_transaksi. ' Barang '. $s->nama_barang .' sudah diterima oleh pembeli'  
+            )));
+            \Mail::to($s->email)->send(new \App\Mail\KonfirmasiPenjualan(array(
+                'title' => 'Konfirmasi pembelian',
+                'body' => 'Transaksi '.$s->kode_transaksi. ' Barang '. $s->nama_barang .' sudah diterima oleh pembeli'  
+            )));
         }
-
+        
+        toastr()->success('Status pesanan berhasil diperbarui', 'Berhasil!');
         return view('front.cekout');
     }
 }

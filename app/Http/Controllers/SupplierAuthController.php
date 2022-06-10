@@ -96,6 +96,12 @@ class SupplierAuthController extends Controller
      */
     public function aktif($id)
     {
+        $user = DB::table('admins')->where('id', $id)->first();
+        $messageEmail = [
+            'title' => 'Pendaftara Penjual Baru',
+            'body' => 'Akun anda telah di aktifkan'
+        ];
+        \Mail::to($user->email)->send(new \App\Mail\KonfirmasiPenjualan($messageEmail));
         DB::table('admins')->where('id', $id)->update([
             'status_aktif' => 1,
             'updated_at' => date('Y-m-d H:i:s'),
@@ -107,6 +113,12 @@ class SupplierAuthController extends Controller
 
     public function nonaktif($id)
     {
+        $user = DB::table('admins')->where('id', $id)->first();
+        $messageEmail = [
+            'title' => 'Pendaftara Penjual Baru',
+            'body' => 'Akun anda telah di non aktifkan'
+        ];
+        \Mail::to($user->email)->send(new \App\Mail\KonfirmasiPenjualan($messageEmail));
         DB::table('admins')->where('id', $id)->update([
             'status_aktif' => 0,
             'updated_at' => date('Y-m-d H:i:s'),
@@ -207,6 +219,18 @@ class SupplierAuthController extends Controller
             'updated_at' => date('Y-m-d H:i:s'),
         ]);
         // dd($admin->id);
+        
+        toastr()->success('Akun anda berhasil terdaftar, silahkan menunggu akun anda di aktifkan oleh admin ', 'Berhasil!');
+        \Mail::to(getContackUs()->email_center)->send(new \App\Mail\KonfirmasiPenjualan(array(
+            'title' => 'Pendaftara Penjual Baru',
+            'body' => 'User baru daftar sebagai penjual, silahkan cek pada menu manajemen user'
+        )));
+
+        \Mail::to($request['email'])->send(new \App\Mail\KonfirmasiPenjualan(array(
+            'title' => 'Pendaftara Penjual Baru',
+            'body' => 'Akun anda berhasil terdaftar pada website serba serbi ujungpangkah, silahkan menunggu akun anda di aktifkan oleh admin'
+        )));
+
         return redirect()->intended('login/supplier');
         
     }
@@ -227,7 +251,7 @@ class SupplierAuthController extends Controller
 
             return redirect()->intended('/');
         }
-        toastr()->error('Login Gagal, silahkan cek email dan password anda ', 'Gagal!');
+        toastr()->success('Login Berhasil', 'Berhasil!');
         return back()->withInput($request->only('email', 'remember'));
     }
 
@@ -238,51 +262,15 @@ class SupplierAuthController extends Controller
 
     public function tet(){
 
-        // $details = [
-        //     'title' => 'Mail from websitepercobaan.com',
-        //     'body' => 'This is for testing email using smtp'
-        // ];
+        $details = [
+            'title' => 'Mail from websitepercobaan.com',
+            'body' => 'This is for testing email using smtp'
+        ];
        
-        // \Mail::to('emailpenerima@gmail.com')->send(new \App\Mail\KonfirmasiPenjualan($details));
+        \Mail::to('yokihidayaturr13@gmail.com')->send(new \App\Mail\KonfirmasiPenjualan($details));
        
-        // dd("Email sudah terkirim.");
+        dd("Email sudah terkirim.");
 
-        for ($i=1; $i <= 24 ; $i++) { 
-            DB::table('master_barang')->insert([
-                'kode_barang' => 'BARANG-'. $i,
-                'nama_barang' => 'Kripik Ikan' . $i,
-                'deskripsi_barang' => '',
-                'harga_barang' => rand(5000,1200),
-                'satuan_barang' => 'PACK',
-                'id_kategori' => rand(1,3),
-                'id_supplier'   => rand(1,3),
-                'created_at' => date('Y-m-d'),
-                'updated_at' => date('Y-m-d'),
-                'file_sampul' => 'File_'.$i.'.jpeg'
-            ]);
-            $id_barang = DB::getPdo()->lastInsertId();
-
-            $data = DB::table('master_barang')->where('id_barang', $id_barang)->first();
-            DB::table('transaksi')->insert([
-                'id_user_pembeli' => 0,
-                'id_jenis_transaksi' => 2,
-                'id_supplier' => $data->id_supplier,
-                'kode_transaksi' => 'UP_QTY_'.rand(10,1000),
-                'tanggal_transaksi' => date('Y-m-d'),
-                'created_at' => date('Y-m-d'),
-                'updated_at' => date('Y-m-d')
-            ]);
-    
-            $id_transaksi = DB::getPdo()->lastInsertId();
-
-            DB::table('detail_transaksi')->insert([
-                'id_barang' => $id_barang,
-                'id_transaksi' => $id_transaksi,
-                'qty' => 20,
-                'created_at' => date('Y-m-d'),
-                'updated_at' => date('Y-m-d')
-            ]);
-        }
     
     }
 }

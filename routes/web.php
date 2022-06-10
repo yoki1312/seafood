@@ -15,6 +15,7 @@ use App\Http\Controllers\SettingAkunSupplierController;
 use App\Http\Controllers\DaftarPembeliController; 
 use App\Http\Controllers\UserController; 
 use App\Http\Controllers\LaporanPenjualanController; 
+use App\Http\Controllers\GambarDashboardController; 
 
 /*
 |--------------------------------------------------------------------------
@@ -95,6 +96,12 @@ Route::controller(PesananController::class)->group(function(){
 Route::controller(PageShopController::class)->group(function(){
 
     Route::get('shop', 'index')->name('shop.index');
+
+});
+Route::controller(GambarDashboardController::class)->group(function(){
+
+    Route::get('gambarDahsboard', 'index')->name('gambarDahsboard.index');
+    Route::post('gambarDahsboard/store', 'store')->name('gambarDahsboard.store');
 
 });
 
