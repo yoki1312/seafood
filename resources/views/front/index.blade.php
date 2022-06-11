@@ -263,13 +263,13 @@
                                 <hr>
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputEmail1">Email address</label>
-                                    <input type="email" class="form-control" name="email" id="exampleInputEmail1"
+                                    <label for="">Email address</label>
+                                    <input type="email" class="form-control" name="email" 
                                         aria-describedby="emailHelp" placeholder="Enter email">
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputPassword1">Password</label>
-                                    <input type="password" name="password" class="form-control" id="exampleInputPassword1"
+                                    <label for="">Password</label>
+                                    <input type="password" name="password" class="form-control" 
                                         placeholder="Password">
                                 </div>
                                 <div class="form-group text-right">
@@ -301,22 +301,22 @@
                                 <hr>
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputEmail1">Nama Lengkap</label>
-                                    <input type="text" class="form-control" name="name" id="exampleInputEmail1"
+                                    <label for="">Nama Lengkap</label>
+                                    <input type="text" class="form-control" name="name" 
                                         aria-describedby="emailHelp" placeholder="Nama Lengkap">
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputEmail1">Alamat Email</label>
-                                    <input type="email" class="form-control" name="email" id="exampleInputEmail1"
+                                    <label for="">Alamat Email</label>
+                                    <input type="email" class="form-control" name="email" 
                                         aria-describedby="emailHelp" placeholder="Alamat email">
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputPassword1">Password</label>
-                                    <input type="password" name="password" class="form-control" id="exampleInputPassword1"
+                                    <label for="">Password</label>
+                                    <input type="password" name="password" class="form-control" 
                                         placeholder="Password">
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputPassword1">Confirm Password</label>
+                                    <label for="">Confirm Password</label>
                                     <input placeholder="Confirm Password" type="password" id="password-confirm" class="form-control" name="password_confirmation" required autocomplete="new-password" />
                                 </div>
                                 <div class="form-group text-right">
