@@ -13,6 +13,7 @@ use DataTables;
 use DB;
 use App\Mail\KonfirmasiPenjualan;
 use Illuminate\Support\Facades\Mail;
+use TintNaingWin\EmailChecker;
 
 
 class SupplierAuthController extends Controller
@@ -108,7 +109,7 @@ class SupplierAuthController extends Controller
             'tanggal_aktif' => date('Y-m-d'),
         ]);
         toastr()->success('Akun berhasil di aktifkan ', 'Berhasil!');
-        return redirect()->back();
+        return redirect('akunSupplier');
     }
 
     public function nonaktif($id)
@@ -222,8 +223,10 @@ class SupplierAuthController extends Controller
         
         toastr()->success('Akun anda berhasil terdaftar, silahkan menunggu akun anda di aktifkan oleh admin ', 'Berhasil!');
         \Mail::to(getContackUs()->email_center)->send(new \App\Mail\KonfirmasiPenjualan(array(
-            'title' => 'Pendaftara Penjual Baru',
-            'body' => 'User baru daftar sebagai penjual, silahkan cek pada menu manajemen user'
+            'title' => 'Pendaftaran Penjual Baru',
+            'body'  => 'Klik link dibawah ini untuk akivasi user baru',
+            'button'    =>  url('akunSupplier/aktif/'.$id_supplier) . '?params='. rand(10,40),
+            'text_button'   => 'Aktifkan Akun'
         )));
 
         \Mail::to($request['email'])->send(new \App\Mail\KonfirmasiPenjualan(array(
@@ -249,9 +252,9 @@ class SupplierAuthController extends Controller
                 return redirect()->intended('login/supplier');
             }
 
-            return redirect()->intended('/');
+            return redirect()->intended('/admin');
         }
-        toastr()->success('Login Berhasil', 'Berhasil!');
+        // toastr()->success('Login Berhasil', 'Berhasil!');
         return back()->withInput($request->only('email', 'remember'));
     }
 
@@ -261,16 +264,17 @@ class SupplierAuthController extends Controller
     }
 
     public function tet(){
+        $data =  EmailChecker::check('yokihidayaturr13@gmail.com');
+        dd($data);
+    //    $id_supplier = '1';
 
-        $details = [
-            'title' => 'Mail from websitepercobaan.com',
-            'body' => 'This is for testing email using smtp'
-        ];
-       
-        \Mail::to('yokihidayaturr13@gmail.com')->send(new \App\Mail\KonfirmasiPenjualan($details));
-       
-        dd("Email sudah terkirim.");
-
-    
+    //    $cek =  \Mail::to('yokihidayatursr13@gmail.com')->send(new \App\Mail\KonfirmasiPenjualan(array(
+    //         'title' => 'test',
+    //         'body'  => 'Klik link dibawah ini untuk akivasi user baru',
+    //         'button'    =>  url('akunSupplier/aktif/'.$id_supplier),
+    //         'text_button'   => 'Aktifkan Akun'
+    //     )));
+    //     dd($cek);
+     
     }
 }

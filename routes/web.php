@@ -46,9 +46,9 @@ Route::get('/seafood', function () {
     return view('front.dashboard');
 });
 
-Route::get('/', function () {
+Route::get('/admin', function () {
      return view('admin.dashboard');
-});
+})->middleware('isSuper');
 Route::get('/contact-us', function () {
      return view('front.contact-us');
 });
@@ -106,8 +106,8 @@ Route::controller(GambarDashboardController::class)->group(function(){
 });
 
 Route::controller(SupplierAuthController::class)->group(function(){
-
     Route::get('tet', 'tet');
+
     Route::get('akunSupplier', 'index')->name('akunSupplier.index');
     Route::get('akunSupplier/aktif/{id_supplier}', 'aktif')->name('akunSupplier.aktif');
     Route::get('akunSupplier/nonaktif/{id_supplier}', 'nonaktif')->name('akunSupplier.nonaktif');

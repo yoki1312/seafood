@@ -27,24 +27,24 @@
                            <input type="hidden" name="id_transaksi" value="{{ $header->id_transaksi }}" />
                                 <div class="col-lg-6 form-group">
                                     <p>Nama Penerima<span class="text-danger">*</span></p>
-                                    <input value="<?= $dataTransaksi->nama ?>" class="form-control form-control-sm" name="nama_depan" type="text">
+                                    <input value="<?= $dataTransaksi->nama ?>" class="form-control form-control-sm" name="nama_depan" type="text" required>
                                 </div>
                                 <input class="form-control form-control-sm" name="nama_belakang" type="hidden">
                                 <div class="col-lg-6 form-group">
                                     <p>Email<span class="text-danger">*</span></p>
-                                    <input value="<?= $dataTransaksi->email ?>" class="form-control form-control-sm" name="email" type="email">
+                                    <input value="<?= $dataTransaksi->email ?>" class="form-control form-control-sm" name="email" type="email" required>
                                 </div>
                                 <div class="col-lg-6 form-group">
                                     <p>Nomor Hp<span class="text-danger">*</span></p>
-                                    <input class="form-control form-control-sm" value="<?= $dataTransaksi->nomor_hp ?>" name="nomor_hp" type="number">
+                                    <input class="form-control form-control-sm" value="<?= $dataTransaksi->nomor_hp ?>" name="nomor_hp" type="number" required>
                                 </div>
                                 <div class="col-lg-6 form-group">
                                     <p>Kota<span class="text-danger">*</span></p>
-                                    <input class="form-control form-control-sm" name="kota" type="text" value="<?= $dataTransaksi->kota ?>">
+                                    <input class="form-control form-control-sm" name="kota" type="text" value="<?= $dataTransaksi->kota ?>" required>
                                 </div>
                                 <div class="col-lg-12 form-group">
-                                    <p>Alamat Lengkap<span>*</span></p>
-                                    <textarea style="width:100%" class="form-control" id="" name="alamat_lengkap" cols="30"><?= $dataTransaksi->alamat_lengkap ?></textarea>
+                                    <p>Alamat Lengkap<span class="text-danger">*</span></p>
+                                    <textarea style="width:100%" class="form-control" id="" name="alamat_lengkap" cols="30" required><?= $dataTransaksi->alamat_lengkap ?></textarea>
                                 </div>
                                 <div class="col-lg-12 form-group">
                                     <p>Catatan Pembelian</p>
@@ -85,11 +85,11 @@
                                     <small>Nomor Whatsapp :<a target="_blank" href="https://wa.me/{{ getContackUs()->telp_center }}"> {{ getContackUs()->telp_center }}</a></small>
                                 </div>
                                 <div class="checkout__input__checkbox">
-                                    <p>File Pembayaran</p>
+                                    <p>File Pembayaran <span class="text-danger">*</span></p>
                                     @if(!empty($dataTransaksi->file))
                                     <a target="_blank" href={{ asset('file-pembayaran/'.$dataTransaksi->file)}} >Lihat File Pembayaran</a>
                                     @else
-                                    <input type="file" name="file" id="payment" require>
+                                    <input type="file" name="file" id="payment" required>
 
                                     @endif
                                 </div>

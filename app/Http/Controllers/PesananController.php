@@ -229,7 +229,10 @@ class PesananController extends Controller
         event(new StatusLiked($data));
         \Mail::to(getContackUs()->email_center)->send(new \App\Mail\KonfirmasiPenjualan(array(
             'title' => 'Konfirmasi Pembayaran Pesanan',
-            'body' => Auth::user()->name . ' melakukan pembayaran atas transaksi '.$transaksi->kode_transaksi . ' silahkan cek pada menu laporan penjualan'
+            'body' => Auth::user()->name . ' melakukan pembayaran atas transaksi '.$transaksi->kode_transaksi . ' silahkan cek pada menu laporan penjualan',
+            'bukti_pembayaran' => $fileName,
+            'button' => url('laporan_penjualan/acc_pembayaran/'. $request->id_transaksi),
+            'text_button'   => 'Setujui Pembayaran'
         )));
         toastr()->success('pembayaran berhasil, dan admin segera melakukan konfirmasi pembayaran', 'Berhasil!');
         return redirect('/seafood');

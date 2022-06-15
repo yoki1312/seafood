@@ -4,8 +4,72 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f6c825798b4fff385b6bdc426a9d785a",
+    "content-hash": "467efcfc6e58733cfa8350c72c3cc7e3",
     "packages": [
+        {
+            "name": "aman00323/emailchecker",
+            "version": "2.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/aman00323/email-checker.git",
+                "reference": "78bdcb62a774ac850da1be7d1c2c5f4f01f2f940"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/aman00323/email-checker/zipball/78bdcb62a774ac850da1be7d1c2c5f4f01f2f940",
+                "reference": "78bdcb62a774ac850da1be7d1c2c5f4f01f2f940",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "~3.6.0|~3.7.0|~3.8.0",
+                "phpunit/phpunit": "^7.0|^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Aman\\EmailVerifier\\EmailCheckerServiceProvider"
+                    ],
+                    "aliases": {
+                        "EmailChecker": "Aman\\EmailVerifier\\EmailCheckerFacade"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Aman\\EmailVerifier\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Aman Nurani",
+                    "email": "work.amannurani@gmail.com",
+                    "role": "Software Engineer"
+                }
+            ],
+            "description": "Laravel package for checking email address is exist or not in real world",
+            "homepage": "https://github.com/aman00323/email-checker",
+            "keywords": [
+                "disposable email checker",
+                "disposable emails",
+                "email exist or not",
+                "email validation",
+                "email verification",
+                "php email verifier"
+            ],
+            "support": {
+                "issues": "https://github.com/aman00323/email-checker/issues",
+                "source": "https://github.com/aman00323/email-checker/tree/2.2.0"
+            },
+            "time": "2020-04-28T13:20:34+00:00"
+        },
         {
             "name": "asm89/stack-cors",
             "version": "v2.1.1",
@@ -6057,6 +6121,125 @@
             "time": "2021-12-08T09:12:39+00:00"
         },
         {
+            "name": "tintnaingwin/email-checker",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tintnaingwinn/email-checker.git",
+                "reference": "6ba7c3178b8528495a0663e42f68c7bfe4ebc42a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tintnaingwinn/email-checker/zipball/6ba7c3178b8528495a0663e42f68c7bfe4ebc42a",
+                "reference": "6ba7c3178b8528495a0663e42f68c7bfe4ebc42a",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "illuminate/support": "~5.5.0|~5.6.0|~5.7.0|~5.8.0|^6.0|^7.0|^8.0",
+                "illuminate/validation": "~5.5.0|~5.6.0|~5.7.0|~5.8.0|^6.0|^7.0|^8.0",
+                "php": "^7.0|^8.0",
+                "tintnaingwin/email-checker-php": "^1.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.0",
+                "orchestra/testbench": "^3.5|^4.0",
+                "phpunit/phpunit": "^6.0|^7.0|^8.0"
+            },
+            "default-branch": true,
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0-dev"
+                },
+                "laravel": {
+                    "providers": [
+                        "Tintnaingwin\\EmailChecker\\EmailCheckerServiceProvider"
+                    ],
+                    "aliases": {
+                        "EmailChecker": "Tintnaingwin\\EmailChecker\\Facades\\EmailChecker"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Tintnaingwin\\EmailChecker\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tint Naing Win",
+                    "email": "amigo.k8@gmail.com"
+                }
+            ],
+            "description": "Laravel Package To Validate If An Email Address Exists Without Sending An Email",
+            "keywords": [
+                "email",
+                "laravel",
+                "smtp",
+                "validate"
+            ],
+            "support": {
+                "issues": "https://github.com/tintnaingwinn/email-checker/issues",
+                "source": "https://github.com/tintnaingwinn/email-checker/tree/master"
+            },
+            "time": "2021-12-05T04:14:11+00:00"
+        },
+        {
+            "name": "tintnaingwin/email-checker-php",
+            "version": "v1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tintnaingwinn/email-checker-php.git",
+                "reference": "5fa1cef6f4c6a2c67bff66864f1bc51a421b393c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tintnaingwinn/email-checker-php/zipball/5fa1cef6f4c6a2c67bff66864f1bc51a421b393c",
+                "reference": "5fa1cef6f4c6a2c67bff66864f1bc51a421b393c",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "php": "^5.5|^7.1.3"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^8.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Tintnaingwin\\EmailCheckerPHP\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tint Naing Win",
+                    "email": "amigo.k8@gmail.com"
+                }
+            ],
+            "description": "PHP Package To Validate If An Email Address Exists Without Sending An Email",
+            "keywords": [
+                "email",
+                "php",
+                "smtp",
+                "validate"
+            ],
+            "support": {
+                "issues": "https://github.com/tintnaingwinn/email-checker-php/issues",
+                "source": "https://github.com/tintnaingwinn/email-checker-php/tree/master"
+            },
+            "time": "2019-11-12T17:45:17+00:00"
+        },
+        {
             "name": "vlucas/phpdotenv",
             "version": "v5.4.1",
             "source": {
@@ -9512,5 +9695,5 @@
         "php": "^7.3|^8.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.2.0"
 }

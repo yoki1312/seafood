@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
+        "aman00323/emailchecker": "^2.2",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^8.75",
@@ -13,6 +14,7 @@
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.4",
         "pusher/pusher-php-server": "^7.0",
+        "tintnaingwin/email-checker": "^2.0",
         "yajra/laravel-datatables": "^1.5",
         "yoeunes/toastr": "^1.2"
     },
