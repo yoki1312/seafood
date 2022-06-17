@@ -235,7 +235,7 @@ class PesananController extends Controller
             'text_button'   => 'Setujui Pembayaran'
         )));
         toastr()->success('pembayaran berhasil, dan admin segera melakukan konfirmasi pembayaran', 'Berhasil!');
-        return redirect('/seafood');
+        return redirect('/');
         // dd($request->all());
     }
 
