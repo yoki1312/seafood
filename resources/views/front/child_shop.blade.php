@@ -12,7 +12,7 @@
             <h6><a href="{{ url('detail/barang/'.$k->id_barang) }}">{{ $k->nama_barang }} </a></h6>
             <h5>Rp {{ number_format($k->harga_barang,0) }} ( {{ $k->satuan_barang }} )</h5>
             <small>Penjual : {{ $k->name }}</small><br>
-            <small>Stock : {{ abs(number_format($k->stock,0)) }} - </small>
+            <small>Stock : <?= ($k->stock <= 0 ? '<span class="text-danger"> Habis</span>' : abs(number_format($k->stock,0))) ?> - </small>
             <small>Terjual : {{ abs(number_format($k->terjual,0)) }}</small>
         </div>
     </div>

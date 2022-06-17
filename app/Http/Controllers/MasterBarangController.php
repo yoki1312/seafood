@@ -22,6 +22,12 @@ class MasterBarangController extends Controller
             if(Auth::guard('admin')->user()->is_super == 2){
                 $data->where('id_supplier', Auth::guard('admin')->user()->id);
             }
+             if($request->status_stok == 0){
+                $data->havingRaw('sum(tb.qty) > 0');
+            }
+            if($request->status_stok == 1){
+                $data->havingRaw('qty <= 0');
+            }
             $data->groupBy('ta.id_barang');
             $data->get();
             return Datatables::of($data)

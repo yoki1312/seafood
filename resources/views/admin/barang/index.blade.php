@@ -33,6 +33,24 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-sm-12 form-group">
+                        <label>Status Stok Barang : </label>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input filter" type="radio" name="status_stok" id="inlineRadio1"
+                                value="0" checked>
+                            <label class="form-check-label" for="inlineRadio1">Stok Tersedia</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input filter" type="radio" name="status_stok" id="inlineRadio2"
+                                value="1">
+                            <label class="form-check-label" for="inlineRadio2">Stok Habis</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input filter" type="radio" name="status_stok" id="inlineRadio3"
+                                value="2">
+                            <label class="form-check-label" for="inlineRadio3">Tampilkan Semua</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 form-group">
                         <table width="100%"
                             class="tb-barang table table-hover text-nowrap dataTable dtr-inline table-sm"
                             aria-describedby="example2_info">
@@ -66,7 +84,8 @@
                 <div class="row">
                     <div class="col-sm-3">
                         <label>Stock Saat Ini Barang </label>
-                        <input type="number" name="" class="form-control form-control-sm text-right stock-now" readonly id="">
+                        <input type="number" name="" class="form-control form-control-sm text-right stock-now" readonly
+                            id="">
                     </div>
                     <div class="col-sm-3">
                         <label>Kategori Transaksi </label>
@@ -77,11 +96,12 @@
                     </div>
                     <div class="col-sm-3">
                         <label>Jumlah Stock</label>
-                        <input type="number" oninput="calculateStock()" name="" class="form-control form-control-sm text-right qty-baru" id="">
+                        <input type="number" oninput="calculateStock()" name=""
+                            class="form-control form-control-sm text-right qty-baru" id="">
                     </div>
                     <div class="col-sm-3">
                         <label>Total Stock</label>
-                        <input type="number"  name="" class="form-control form-control-sm text-right totalStock" id="">
+                        <input type="number" name="" class="form-control form-control-sm text-right totalStock" id="">
                     </div>
                     <!-- <div class="col-sm-2">
                         <label>Satuan </label>
@@ -105,7 +125,14 @@
         var table = $('.tb-barang').DataTable({
             processing: true,
             serverSide: true,
-            ajax: "{{ route('barang.index') }}",
+            "ajax": {
+                url: "{{ route('barang.index') }}",
+                type: "GET",
+                data: function (data) {
+                    data.status_stok = $('input[name="status_stok"]:checked').val();
+                    return data;
+                }
+            },
             columns: [{
                     data: 'id_barang',
                     className: 'text-center',
@@ -117,7 +144,8 @@
                     data: 'file_sampul',
                     className: 'text-center',
                     render: function (meta, data, row, type) {
-                        return '<img style="max-width: 100px;" src="'+ url +'/'+ row.file_sampul + '" />';
+                        return '<img style="max-width: 100px;" src="' + url + '/' + row
+                            .file_sampul + '" />';
                     }
                 },
                 {
@@ -136,9 +164,10 @@
                 {
                     data: 'qty',
                     name: 'email',
-                    className: 'text-right',
+                    className: 'text-center',
                     render: function (meta, data, row, type) {
-                        return row.qty == null ? 0 : row.qty
+                        return row.qty == null || row.qty == 0 ?
+                            '<span class="badge badge-danger">Stok Habis</span>' : row.qty
                     }
                 },
                 {
@@ -162,12 +191,12 @@
             modal.modal('show');
 
         });
-        $(document).on('click','.btn-save-stok', function () {
+        $(document).on('click', '.btn-save-stok', function () {
             let modal = $('#modal-tambah-stok');
             var qty = modal.find('.qty-baru').val();
             var url = '{{ route("barang.tambahStock") }}';
-            if($('.kategori-transaksi').val() == 2){
-                qty = qty *-1
+            if ($('.kategori-transaksi').val() == 2) {
+                qty = qty * -1
             }
             $.ajax({
                 url: url,
@@ -177,25 +206,31 @@
                     qty: qty
                 },
                 success: function (response) {
-                   table.ajax.reload(null,false);
-                   modal.modal('hide')
+                    table.ajax.reload(null, false);
+                    modal.modal('hide')
                 },
                 error: function (error) {
                     console.log(error)
                 }
             });
+        });
+
+        $(document).on('change', '.filter', function(){
+            table.ajax.reload(null,false)
         })
-    })
-    function calculateStock(){
+    });
+
+    function calculateStock() {
         var stockReady = parseInt($('.stock-now').val());
         var stokBaru = $('.qty-baru').val();
-        if($('.kategori-transaksi').val() == 1){
+        if ($('.kategori-transaksi').val() == 1) {
             var totalStock = parseInt(stockReady) + parseInt(stokBaru);
         }
-        if($('.kategori-transaksi').val() == 2){
+        if ($('.kategori-transaksi').val() == 2) {
             var totalStock = parseInt(stockReady) - parseInt(stokBaru);
         }
-        $('.totalStock').val(totalStock)   
+        $('.totalStock').val(totalStock)
     }
+
 </script>
 @endsection
