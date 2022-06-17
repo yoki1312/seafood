@@ -38,7 +38,7 @@ Route::get('notifikasi', function () {
 });
 
 
-Route::get('/seafood', function () {
+Route::get('/', function () {
      return view('front.dashboard');
     });
     Route::get('logout/user', function () {

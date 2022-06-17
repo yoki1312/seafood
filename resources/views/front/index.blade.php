@@ -7,11 +7,11 @@
     <meta name="keywords" content="Ogani, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" href="{{ asset('logoChild.png') }}">
     <title>Serba Serbi Ujungpangkah</title>
-
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap" rel="stylesheet">
-
+    
     <!-- Css Styles -->
     <link rel="stylesheet" href="{{ asset('assetFront/css/bootstrap.min.css') }}" type="text/css">
     <link rel="stylesheet" href="{{ asset('assetFront/css/font-awesome.min.css') }}" type="text/css">
@@ -25,7 +25,7 @@
     <link rel="stylesheet" href="{{ asset('summernote/summernote-bs4.min.css') }}" type="text/css">
     <link rel="stylesheet" href="{{ asset('assetAdmin/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet"
-        href="{{ asset('assetAdmin/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
+    href="{{ asset('assetAdmin/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assetAdmin/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assetAdmin/css/fileinput.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assetAdmin/css/toastr.min.css') }}">
@@ -38,7 +38,8 @@
     .checked-rating {
         color: orange;
     }
-
+    
+   
 </style>
 
 <body>
