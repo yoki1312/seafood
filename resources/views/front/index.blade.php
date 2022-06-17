@@ -82,7 +82,7 @@
         </div>
         <nav class="humberger__menu__nav mobile-menu">
             <ul>
-                <li class="home-li"><a href="{{ url('seafood') }}">Dashboard</a></li>
+                <li class="home-li"><a href="{{ url('/') }}">Dashboard</a></li>
                 <li class="shop-li"><a href="{{ route('shop.index')}}">Produk</a></li>
                 @if(isset(Auth::user()->id ))
                 <li class="pembelian-li"><a href="#">Pembelian</a>
@@ -167,7 +167,7 @@
                 <div class="col-lg-6">
                     <nav class="header__menu text-center">
                         <ul>
-                            <li class="home-li"><a href="{{ url('seafood') }}">Home</a></li>
+                            <li class="home-li"><a href="{{ url('/') }}">Home</a></li>
                             <li class="shop-li"><a href="{{ route('shop.index')}}">Produk</a></li>
                             @if(isset(Auth::user()->id ))
                             <li class="pembelian-li"><a href="#">Pembelian</a>
