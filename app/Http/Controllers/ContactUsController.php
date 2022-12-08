@@ -35,32 +35,43 @@ class ContactUsController extends Controller
     public function store(Request $request)
     {
 
+        
+        DB::beginTransaction();
 
-        if(isset($request->gambar)){
-            $r = $request->file('gambar');
-            $fileName = 'foto-'.time()."_". $request->judul;
-            $r->move(public_path().'/foto-contact-us', $fileName);
+        try {
+            if(isset($request->gambar)){
+                $r = $request->file('gambar');
+                $fileName = 'foto-'.time()."_". $request->judul;
+                $r->move(public_path().'/foto-contact-us', $fileName);
 
-        }
-        DB::table('master_contact_us')->where('id_contact_us','!=',null)->update([
-            'judul' => $request->judul,
-            'no_rekening' => $request->no_rekening,
-            'nama_rekening' => $request->nama_rekening,
-            'nama_bank' => $request->nama_bank,
-            'keterangan'  => $request->keterangan,
-            'email_center'  => $request->email_center,
-            'alamat_center'  => $request->alamat_center,
-            'telp_center'  => $request->telp_center,
-            'created_at'    => date('Y-m-d H:i:s'),
-            'updated_at'    => date('Y-m-d H:i:s'),
-        ]);
-        if(isset($request->gambar)){
-            DB::table('master_contact_us')->where('id_contact_us','!=',null)->update([
-                'gambar' => $fileName,
+            }
+            DB::table('master_contact_us')->delete();
+            DB::table('master_contact_us')->where('id_contact_us','!=',null)->insert([
+                'judul' => $request->judul,
+                'no_rekening' => $request->no_rekening,
+                'nama_rekening' => $request->nama_rekening,
+                'nama_bank' => $request->nama_bank,
+                'keterangan'  => $request->keterangan,
+                'email_center'  => $request->email_center,
+                'alamat_center'  => $request->alamat_center,
+                'telp_center'  => $request->telp_center,
+                'created_at'    => date('Y-m-d H:i:s'),
+                'updated_at'    => date('Y-m-d H:i:s'),
             ]);
+            if(isset($request->gambar)){
+                DB::table('master_contact_us')->where('id_contact_us','!=',null)->update([
+                    'gambar' => $fileName,
+                ]);
+            }
+            DB::commit();
+            return redirect()->back();
+        // all good
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+            DB::rollback();
+            // something went wrong
         }
 
-        return redirect()->back();
     }
 
     /**

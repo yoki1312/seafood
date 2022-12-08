@@ -33,7 +33,7 @@
                             <div class="form-group">
                                 <div class="text-center">
                                     <img style="max-width: 80%;"
-                                        src="{{ asset('foto-contact-us/'. getContackUs()->gambar) }}"
+                                        src="{{ asset('foto-contact-us/'. (isset(getContackUs()->gambar) ? getContackUs()->gambar : '') ) }}"
                                         alt="User profile picture">
                                 </div>
                             </div>
@@ -45,42 +45,42 @@
                     <div class="form-group">
                         <label for="inputName">Judul</label>
                         <input name="judul" type="text" id="inputName" class="form-control form-control-sm"
-                            value="{{ getContackUs()->judul }}" require>
+                            value="{{ isset(getContackUs()->judul) ? getContackUs()->judul : '' }}" require>
                     </div>
                     <div class="form-group">
                         <label for="inputName">Email Center</label>
                         <input name="email_center" type="email" id="inputName" class="form-control form-control-sm"
-                            value="{{ getContackUs()->email_center }}" require>
+                            value="{{ isset(getContackUs()->email_center) ? getContackUs()->email_center : '' }}" require>
                     </div>
                     <div class="form-group">
                         <label for="inputName">Telp Center</label>
                         <input name="telp_center" type="text" id="inputName" class="form-control form-control-sm"
-                            value="{{ getContackUs()->telp_center }}" require>
+                            value="{{ isset(getContackUs()->telp_center) ? getContackUs()->telp_center : '' }}" require>
                     </div>
                     <div class="form-group">
                         <label for="inputName">Nama Bank</label>
                         <input name="nama_bank" type="text" id="inputName" class="form-control form-control-sm"
-                            value="{{ getContackUs()->nama_bank }}" require>
+                            value="{{ isset(getContackUs()->nama_bank) ? getContackUs()->nama_bank : '' }}" require>
                     </div>
                     <div class="form-group">
                         <label for="inputName">Nama Pemilik Rekening</label>
                         <input name="nama_rekening" type="text" id="inputName" class="form-control form-control-sm"
-                            value="{{ getContackUs()->nama_rekening }}" require>
+                            value="{{ isset(getContackUs()->nama_rekening) ? getContackUs()->nama_rekening : '' }}" require>
                     </div>
                     <div class="form-group">
                         <label for="inputName">Nomor Rekening</label>
                         <input name="no_rekening" type="text" id="inputName" class="form-control form-control-sm"
-                            value="{{ getContackUs()->no_rekening }}" require>
+                            value="{{ isset(getContackUs()->no_rekening) ? getContackUs()->no_rekening : '' }}" require>
                     </div>
                     <div class="form-group">
                         <label for="inputEmail">Alamat Center</label>
                         <input name="alamat_center" type="text" id="inputName" class="form-control form-control-sm"
-                            value="{{ getContackUs()->alamat_center }}" require>
+                            value="{{ isset(getContackUs()->alamat_center) ? getContackUs()->alamat_center : '' }}" require>
                     </div>
                     <div class="form-group">
                         <label for="inputEmail">Keterangan</label>
                         <textarea name="keterangan" id="inputMessage" class="form-control" rows="4"
-                            require>{{ getContackUs()->keterangan }}</textarea>
+                            require>{{ isset(getContackUs()->keterangan) ? getContackUs()->keterangan : '' }}</textarea>
                     </div>
 
                     <div class="form-group">

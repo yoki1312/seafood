@@ -97,6 +97,7 @@ class LaporanPenjualanController extends Controller
             $sql->where('td.id_supplier',  Auth::guard('admin')->user()->id);
         }
         $data = $sql->get();
+        // dd($data);
         return view('admin.laporan_penjualan.detail', compact('header','data','data_transaksi'));
     }
 

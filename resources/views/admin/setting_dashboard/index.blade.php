@@ -22,19 +22,27 @@
                 <form method="post" action="{{ route('gambarDahsboard.store') }}" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
-                        <div class="col-sm-6 form-group">
+                        <div class="col-sm-3 form-group">
                             <label>Gambar 1</label>
                             <input name="gambar_utama[file]" type="file" class="foto-dashboard" />
+                        </div>
+                        <div class="col-sm-3 form-group">
+                            <label>Gambar 2</label>
+                            <input name="gambar_utama[gambar_t1]" type="file" class="foto-dashboard" />
+                        </div>
+                        <div class="col-sm-3 form-group">
+                            <label>Gambar 3</label>
+                            <input name="gambar_utama[gambar_t2]" type="file" class="foto-dashboard" />
                         </div>
                         <div class="col-sm-6 form-group">
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Judul</label>
                                 <input name="gambar_utama[judul]" type="text" class="form-control"
-                                    id="exampleInputEmail1" aria-describedby="emailHelp" value="{{  getGambarDashboard()->judul }}" >
+                                    id="exampleInputEmail1" aria-describedby="emailHelp" value="{{  isset(getGambarDashboard()->judul) ? getGambarDashboard()->judul : '' }}" >
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputPassword1">Caption</label>
-                                <textarea class="sumernote" name="gambar_utama[caption]">{{ getGambarDashboard()->caption }}</textarea>
+                                <textarea class="sumernote" name="gambar_utama[caption]">{{ isset(getGambarDashboard()->caption) ? getGambarDashboard()->caption : '' }}</textarea>
                             </div>
                         </div>
                     </div>
@@ -70,7 +78,7 @@
             'showUpload': false,
             'previewFileType': 'any',
             initialPreviewAsData: true,
-            initialPreview: "{{ asset('gambar-dashboard/'. getGambarDashboard()->gambar ) }}",
+            initialPreview: "{{ asset('gambar-dashboard/'. (isset(getGambarDashboard()->gambar) ? getGambarDashboard()->gambar : '' ) ) }}",
             preferIconicZoomPreview : false
         });
         $('.sumernote').summernote({
