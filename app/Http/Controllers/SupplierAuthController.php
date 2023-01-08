@@ -228,17 +228,17 @@ class SupplierAuthController extends Controller
             // dd($admin->id);
             
             toastr()->success('Akun anda berhasil terdaftar, silahkan menunggu akun anda di aktifkan oleh admin ', 'Berhasil!');
-            // \Mail::to(getContackUs()->email_center)->send(new \App\Mail\KonfirmasiPenjualan(array(
-            //     'title' => 'Pendaftaran Penjual Baru',
-            //     'body'  => 'Klik link dibawah ini untuk akivasi user baru',
-            //     'button'    =>  url('akunSupplier/aktif/'.$id_supplier) . '?params='. rand(10,40),
-            //     'text_button'   => 'Aktifkan Akun'
-            // )));
+            \Mail::to(getContackUs()->email_center)->send(new \App\Mail\KonfirmasiPenjualan(array(
+                'title' => 'Pendaftaran Penjual Baru',
+                'body'  => 'Klik link dibawah ini untuk akivasi user baru',
+                'button'    =>  url('akunSupplier/aktif/'.$id_supplier) . '?params='. rand(10,40),
+                'text_button'   => 'Aktifkan Akun'
+            )));
     
-            // \Mail::to($request['email'])->send(new \App\Mail\KonfirmasiPenjualan(array(
-            //     'title' => 'Pendaftara Penjual Baru',
-            //     'body' => 'Akun anda berhasil terdaftar pada website serba serbi ujungpangkah, silahkan menunggu akun anda di aktifkan oleh admin'
-            // )));
+            \Mail::to($request['email'])->send(new \App\Mail\KonfirmasiPenjualan(array(
+                'title' => 'Pendaftara Penjual Baru',
+                'body' => 'Akun anda berhasil terdaftar pada website serba serbi ujungpangkah, silahkan menunggu akun anda di aktifkan oleh admin'
+            )));
             DB::commit();
             // all good
         } catch (\Exception $e) {
