@@ -237,7 +237,7 @@
                                 <i class="fa fa-phone"></i>
                             </div>
                             <div class="hero__search__phone__text">
-                                <h5>+65 11.188.888</h5>
+                                <h5>{{ !empty(getContackUs()->telp_center) ? getContackUs()->telp_center : ''  }}</h5>
                                 <span>Layanan 08:00 - 16:00</span>
                             </div>
                         </div>
