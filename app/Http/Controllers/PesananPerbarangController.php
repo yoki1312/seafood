@@ -23,11 +23,12 @@ class PesananPerbarangController extends Controller
             ->select(DB::raw('sum(abs(ta.qty)) as total_qty, sum(ta.harga) as total_harga, tc.kode_transaksi,tc.tanggal_transaksi,tb.*'))
             ->whereIn('tc.id_status',[2,4])
             ->where('tc.id_jenis_transaksi',1);
-            if(Auth::guard('admin')->user()->id == 0){
-                $data->where('tb.id_supplier',  Auth::guard('admin')->user()->id);
+            if(Auth::guard('admin')->user()->is_super == 2){
+                $data->where('tb.id_supplier', Auth::guard('admin')->user()->id);
             }
             $data->groupBy('ta.id_barang');
             $data->get();
+            $data = $data->get();
             return Datatables::of($data)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
