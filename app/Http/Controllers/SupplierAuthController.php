@@ -197,42 +197,55 @@ class SupplierAuthController extends Controller
     public function register(Request $request)
     {
  
-        $r = $request->file('file');
-        $fileName = 'foto-supplier-'.time()."_". str_replace(' ','_',$request['nama_supplier']);
-        $r->move(public_path().'/foto-supplier', $fileName);
+        DB::beginTransaction();
 
-        $admin = DB::table('admins')->insert([
-            'name' => $request['nama_supplier'],
-            'username' => $request['username'],
-            'is_super' => 2,
-            'foto_profile' => $fileName,
-            'status_aktif' => 0,
-            'email' => $request['email'],
-            'password' => Hash::make($request['password']),
-            'created_at' => date('Y-m-d H:i:s'),
-            'updated_at' => date('Y-m-d H:i:s'),
-        ]);
-        $id_supplier = DB::getPdo()->lastInsertId();
-        DB::table('data_supplier')->insert([
-            'id_supplier' => $id_supplier,
-            'alamat_lengkap' => $request['alamat'],
-            'created_at' => date('Y-m-d H:i:s'),
-            'updated_at' => date('Y-m-d H:i:s'),
-        ]);
-        // dd($admin->id);
-        
-        toastr()->success('Akun anda berhasil terdaftar, silahkan menunggu akun anda di aktifkan oleh admin ', 'Berhasil!');
-        \Mail::to(getContackUs()->email_center)->send(new \App\Mail\KonfirmasiPenjualan(array(
-            'title' => 'Pendaftaran Penjual Baru',
-            'body'  => 'Klik link dibawah ini untuk akivasi user baru',
-            'button'    =>  url('akunSupplier/aktif/'.$id_supplier) . '?params='. rand(10,40),
-            'text_button'   => 'Aktifkan Akun'
-        )));
-
-        \Mail::to($request['email'])->send(new \App\Mail\KonfirmasiPenjualan(array(
-            'title' => 'Pendaftara Penjual Baru',
-            'body' => 'Akun anda berhasil terdaftar pada website serba serbi ujungpangkah, silahkan menunggu akun anda di aktifkan oleh admin'
-        )));
+        try {
+            $fileName = "";
+            if(isset($request->file)){
+                $r = $request->file('file');
+                $fileName = 'foto-supplier-'.time()."_". str_replace(' ','_',$request['nama_supplier']);
+                $r->move(public_path().'/foto-supplier', $fileName);
+            }
+    
+            $admin = DB::table('admins')->insert([
+                'name' => $request['nama_supplier'],
+                'username' => $request['username'],
+                'is_super' => 2,
+                'foto_profile' => $fileName,
+                'status_aktif' => 0,
+                'email' => $request['email'],
+                'password' => Hash::make($request['password']),
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
+            ]);
+            $id_supplier = DB::getPdo()->lastInsertId();
+            DB::table('data_supplier')->insert([
+                'id_supplier' => $id_supplier,
+                'alamat_lengkap' => $request['alamat'],
+                'created_at' => date('Y-m-d H:i:s'),
+                'updated_at' => date('Y-m-d H:i:s'),
+            ]);
+            // dd($admin->id);
+            
+            toastr()->success('Akun anda berhasil terdaftar, silahkan menunggu akun anda di aktifkan oleh admin ', 'Berhasil!');
+            \Mail::to(getContackUs()->email_center)->send(new \App\Mail\KonfirmasiPenjualan(array(
+                'title' => 'Pendaftaran Penjual Baru',
+                'body'  => 'Klik link dibawah ini untuk akivasi user baru',
+                'button'    =>  url('akunSupplier/aktif/'.$id_supplier) . '?params='. rand(10,40),
+                'text_button'   => 'Aktifkan Akun'
+            )));
+    
+            \Mail::to($request['email'])->send(new \App\Mail\KonfirmasiPenjualan(array(
+                'title' => 'Pendaftara Penjual Baru',
+                'body' => 'Akun anda berhasil terdaftar pada website serba serbi ujungpangkah, silahkan menunggu akun anda di aktifkan oleh admin'
+            )));
+            DB::commit();
+            // all good
+        } catch (\Exception $e) {
+            printJSON($e->getMessage());
+            DB::rollback();
+        // something went wrong
+        }
 
         return redirect()->intended('login/supplier');
         

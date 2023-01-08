@@ -4,6 +4,13 @@ function sliderKategori(){
     return \DB::table('master_kategori_seafood')->get();
 }
 
+function printJSON($v){
+  header('Access-Control-Allow-Origin: *');
+  header("Content-type: application/json");
+  echo json_encode($v, JSON_PRETTY_PRINT);
+  exit;
+}
+
 function getProduk(){
     $data  =  DB::table('master_barang as ta')
     ->leftjoin('admins as tb', 'tb.id', 'ta.id_supplier')
