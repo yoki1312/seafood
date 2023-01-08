@@ -34,7 +34,7 @@
                 </div>
                 <div class="row invoice-info">
                     <div class="col-sm-4 invoice-col">
-                        Toko
+                       
                         <address>
                             <strong>Admin</strong><br>
                             {{ getContackUs()->alamat_center }}<br>
@@ -131,9 +131,9 @@
                             Approve pembayaran
                         </a>
                         @endif
-                        <button type="button" class="btn btn-primary float-right" style="margin-right: 5px;">
-                            <i class="fas fa-download"></i> Generate PDF
-                        </button>
+                        <a target="_blank" href="{{ url('laporan_penjualan/cetak/'. $header->id_transaksi) }}" class="btn btn-primary float-right" style="margin-right: 5px;">
+                            <i class="fas fa-download"></i> Cetak dalam format PDF
+                        </a>
                     </div>
                 </div>
             </div>

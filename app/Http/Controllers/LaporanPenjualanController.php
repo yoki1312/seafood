@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use DB;
 use DataTables;
 use Auth;
+use PDF;
 
 class LaporanPenjualanController extends Controller
 {
@@ -97,8 +98,41 @@ class LaporanPenjualanController extends Controller
             $sql->where('td.id_supplier',  Auth::guard('admin')->user()->id);
         }
         $data = $sql->get();
+        // printJSON($data);
         // dd($data);
         return view('admin.laporan_penjualan.detail', compact('header','data','data_transaksi'));
+    }
+    public function cetak($id)
+    {
+        $header = DB::table('transaksi as ta')
+        ->leftjoin('users as tb', 'tb.id','ta.id_user_pembeli')
+        ->leftjoin('master_status_pembelian as tc', 'tc.id_status_pembelian','ta.id_status')
+        ->select(DB::raw('ta.id_transaksi,tb.name as nama_pembeli,tc.nama_status, ta.created_at,ta.*'))
+        ->where('ta.id_transaksi', $id)
+        ->groupBy('ta.kode_transaksi')
+        ->first();
+        
+        $data_transaksi = DB::table('data_transaksi as ta')->where('ta.id_transaksi', $id)
+        ->first();
+
+        $sql = DB::table('transaksi as ta')
+        ->leftjoin('detail_transaksi as tb','tb.id_transaksi','ta.id_transaksi')
+        ->leftjoin('users as tc','tc.id','ta.id_user_pembeli')
+        ->leftjoin('master_barang as td','td.id_barang','tb.id_barang')
+        ->leftjoin('master_status_pembelian as tf','tf.id_status_pembelian','ta.id_status')
+        ->leftjoin('admins as tg', 'tg.id', 'td.id_supplier')
+        ->select('ta.id_transaksi','tb.harga','tb.qty','ta.kode_transaksi','ta.tanggal_transaksi','tc.name as nama_pembeli','td.*','tg.name as nama_toko')
+        ->where('ta.id_transaksi', $id);
+        if(Auth::guard('admin')->user()->is_super == 2){
+            $sql->where('td.id_supplier',  Auth::guard('admin')->user()->id);
+        }
+        $data = $sql->get();
+        $pdf = PDF::loadview('admin.laporan_penjualan.cetak-laporan',[
+            'header'=>$header,
+            'data_transaksi'=>$data_transaksi,
+            'data'=>$data,
+        ]);
+    	return $pdf->stream();
     }
 
     /**

@@ -232,6 +232,7 @@ Route::controller(LaporanPenjualanController::class)->group(function(){
 
     Route::get('penjualan', 'index')->name('lappenjualan.index');
     Route::get('laporan_penjualan/detail/{id_transaksi}', 'show')->name('laporan_penjualan.detail');
+    Route::get('laporan_penjualan/cetak/{id_transaksi}', 'cetak');
     Route::get('laporan_penjualan/acc_pembayaran/{id_transaksi}', 'acc_pembayaran')->name('laporan_penjualan.acc_pembayaran');
 });
 Route::controller(ContactUsController::class)->group(function(){

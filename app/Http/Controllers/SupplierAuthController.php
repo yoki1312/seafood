@@ -109,7 +109,7 @@ class SupplierAuthController extends Controller
             'tanggal_aktif' => date('Y-m-d'),
         ]);
         toastr()->success('Akun berhasil di aktifkan ', 'Berhasil!');
-        return redirect('akunSupplier');
+        return redirect('akunSupplier/detail/' .$id);
     }
 
     public function nonaktif($id)
