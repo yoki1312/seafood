@@ -26,11 +26,11 @@
                             <label>Gambar 1</label>
                             <input name="gambar_utama[file]" type="file" class="foto-dashboard" />
                         </div>
-                        <div class="col-sm-3 form-group">
+                        <div class="col-sm-3 form-group" style="display: none;">
                             <label>Gambar 2</label>
                             <input name="gambar_utama[gambar_t1]" type="file" class="foto-dashboard" />
                         </div>
-                        <div class="col-sm-3 form-group">
+                        <div class="col-sm-3 form-group" style="display: none;">
                             <label>Gambar 3</label>
                             <input name="gambar_utama[gambar_t2]" type="file" class="foto-dashboard" />
                         </div>
