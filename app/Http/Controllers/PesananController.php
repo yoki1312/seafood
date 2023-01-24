@@ -102,6 +102,7 @@ class PesananController extends Controller
      */
     public function store(Request $request)
     {
+        // printJSON($request->all());
         DB::beginTransaction();
 
         try {
@@ -112,8 +113,13 @@ class PesananController extends Controller
                 'tanggal_transaksi' => date('Y-m-d'),
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
-                'kode_transaksi'    => 'PEMBELIAN-'.date('Ymd').'(' . rand(10,100) .')'
+                'kode_transaksi'    => 'PEMBELIAN-'.date('Ymd').'(' . rand(10,100) .')',
+                'id_kecamatan' => $request->id_kecamatan,
+                'id_desa' => $request->id_desa,
+                'ongkir'    => $request->ongkir,
+                'alamat'    => $request->alamat
             ];
+            // printJSON($transaksi);
             DB::table('transaksi')->insert($transaksi);
             $id_transaksi = DB::getPdo()->lastInsertId();
             
@@ -121,6 +127,10 @@ class PesananController extends Controller
                 'id_transaksi' => $id_transaksi,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
+                'id_kecamatan' => $request->id_kecamatan,
+                'id_desa' => $request->id_desa,
+                'ongkir'    => $request->ongkir,
+                'alamat_lengkap'    => $request->alamat
             ]);
 
             $order = $request->detail_transaksi;
@@ -138,7 +148,7 @@ class PesananController extends Controller
                         'id_transaksi' => $id_transaksi,
                         'qty' => $r->qty_pesanan * -1,
                         'id_barang' => $r->id_barang,
-                        'harga' => str_replace(' ', '', $r->total_pesanan),
+                        'harga' => str_replace(',', '', $r->total_pesanan),
                         'created_at' => date('Y-m-d H:i:s'),
                         'updated_at' => date('Y-m-d H:i:s'),
                     ]);

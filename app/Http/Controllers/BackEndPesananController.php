@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB as FacadesDB;
 
 class BackEndPesananController extends Controller
 {
@@ -190,5 +191,35 @@ class BackEndPesananController extends Controller
         $file = DB::table('detail_barang')->where('id_barang', $id)->get();
 
         return view('front.detail_barang', compact('data','file','produkSerupa'));
+    }
+
+    public function hitungOngkir(Request $request)
+    {
+        
+        $dataAwal = DB::table('setting_pengiriman')->first();
+        if( empty($request->id_desa)){
+            return 0;
+        }
+        
+        $desaAwal = DB::table('indonesia_villages')->where('id', $dataAwal->id_desa)->first();
+        $lokasiAwal = json_decode($desaAwal->meta);
+        $lon1 = $lokasiAwal->long;
+        $lat1 = $lokasiAwal->lat;
+        
+        $desaTujuan = DB::table('indonesia_villages')->where('id', $request->id_desa)->first();
+        $lokasiTujuan = json_decode($desaTujuan->meta);
+        $lon2 = $lokasiTujuan->long;
+        $lat2 = $lokasiTujuan->lat; 
+
+        $theta = $lon1 - $lon2;
+        $miles = (sin(deg2rad($lat1)) * sin(deg2rad($lat2))) + (cos(deg2rad($lat1)) * cos(deg2rad($lat2)) * cos(deg2rad($theta)));
+        $miles = acos($miles);
+        $miles = rad2deg($miles);
+        $miles = $miles * 60 * 1.1515;
+        $feet = $miles * 5280;
+        $yards = $feet / 3;
+        $kilometers = $miles * 1.609344;
+        $meters = $kilometers * 1000;
+        return $meters * $dataAwal->harga_meter;
     }
 }

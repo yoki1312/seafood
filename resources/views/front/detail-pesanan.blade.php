@@ -30,22 +30,22 @@
                                     <input value="<?= $dataTransaksi->nama ?>" class="form-control form-control-sm" name="nama_depan" type="text" required>
                                 </div>
                                 <input class="form-control form-control-sm" name="nama_belakang" type="hidden">
-                                <div class="col-lg-6 form-group">
+                                <!-- <div class="col-lg-6 form-group">
                                     <p>Email<span class="text-danger">*</span></p>
                                     <input value="<?= $dataTransaksi->email ?>" class="form-control form-control-sm" name="email" type="email" required>
-                                </div>
+                                </div> -->
                                 <div class="col-lg-6 form-group">
                                     <p>Nomor Hp<span class="text-danger">*</span></p>
                                     <input class="form-control form-control-sm" value="<?= $dataTransaksi->nomor_hp ?>" name="nomor_hp" type="number" required>
                                 </div>
-                                <div class="col-lg-6 form-group">
+                                <!-- <div class="col-lg-6 form-group">
                                     <p>Kota<span class="text-danger">*</span></p>
                                     <input class="form-control form-control-sm" name="kota" type="text" value="<?= $dataTransaksi->kota ?>" required>
                                 </div>
                                 <div class="col-lg-12 form-group">
                                     <p>Alamat Lengkap<span class="text-danger">*</span></p>
                                     <textarea style="width:100%" class="form-control" id="" name="alamat_lengkap" cols="30" required><?= $dataTransaksi->alamat_lengkap ?></textarea>
-                                </div>
+                                </div> -->
                                 <div class="col-lg-12 form-group">
                                     <p>Catatan Pembelian</p>
                                     <textarea style="width:100%" class="form-control" id="" name="catatan" cols="30"><?= $dataTransaksi->catatan ?></textarea>
@@ -78,8 +78,10 @@
                                         @endforeach
                                     </tbody>
                                 </table>
-                                <div class="checkout__order__total">Total <span>Rp {{ number_format($total,0) }}</span>
-                                </div>
+                                @if(!empty($header->ongkir))
+                                    <div class="checkout__order__total">Ongkir <span>Rp {{ number_format($header->ongkir,0) }}</span></div>
+                                @endif
+                                    <div class="checkout__order__total">Grand Total <span>Rp {{ number_format($total + $header->ongkir,0) }}</span> </div>
                                 <div class="checkout__input__checkbox">
                                 <small>Nomor Rekening : {{ getContackUs()->no_rekening }} A/n {{ getContackUs()->nama_rekening }}</small><br> 
                                     <small>Nomor Whatsapp :<a target="_blank" href="https://wa.me/{{ getContackUs()->telp_center }}"> {{ getContackUs()->telp_center }}</a></small>

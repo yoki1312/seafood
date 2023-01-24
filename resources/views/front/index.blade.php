@@ -7,29 +7,29 @@
     <meta name="keywords" content="Ogani, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
     <link rel="icon" href="{{ asset('logoChild.png') }}">
     <title>Serba Serbi Ujungpangkah</title>
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap" rel="stylesheet">
-    
+
     <!-- Css Styles -->
     <link rel="stylesheet" href="{{ asset('assetFront/css/bootstrap.min.css') }}" type="text/css">
     <link rel="stylesheet" href="{{ asset('assetFront/css/font-awesome.min.css') }}" type="text/css">
     <link rel="stylesheet" href="{{ asset('assetFront/css/elegant-icons.css') }}" type="text/css">
-    <link rel="stylesheet" href="{{ asset('assetFront/css/nice-select.css') }}" type="text/css">
+    <!-- <link rel="stylesheet" href="{{ asset('assetFront/css/nice-select.css') }}" type="text/css"> -->
     <link rel="stylesheet" href="{{ asset('assetFront/css/jquery-ui.min.css') }}" type="text/css">
     <link rel="stylesheet" href="{{ asset('assetFront/css/owl.carousel.min.css') }}" type="text/css">
     <link rel="stylesheet" href="{{ asset('assetFront/css/slicknav.min.css') }}" type="text/css">
     <link rel="stylesheet" href="{{ asset('assetFront/css/style.css') }}" type="text/css">
-    <link rel="stylesheet" href="{{ asset('assetFront/css/style.css') }}" type="text/css">
     <link rel="stylesheet" href="{{ asset('summernote/summernote-bs4.min.css') }}" type="text/css">
     <link rel="stylesheet" href="{{ asset('assetAdmin/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
     <link rel="stylesheet"
-    href="{{ asset('assetAdmin/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
+        href="{{ asset('assetAdmin/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assetAdmin/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assetAdmin/css/fileinput.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assetAdmin/css/toastr.min.css') }}">
-    <meta name="csrf-token" content="{{ csrf_token() }}" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
     @if(isset(Auth::user()->id))
     <meta name="id_user" content="{{ Auth::user()->id }}" />
     @endif
@@ -38,8 +38,7 @@
     .checked-rating {
         color: orange;
     }
-    
-   
+
 </style>
 
 <body>
@@ -257,29 +256,29 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-sm-12" style="padding-left: 32px;padding-right: 32px;padding-top: 25px;">
-                        <form method="POST" action="{{ route('login') }}">
+                            <form method="POST" action="{{ route('login') }}">
                                 @csrf
                                 <div class="form-group text-center">
                                     <img style="max-width: 70%;" src="{{ asset('assetFront/img/logo.png') }}" alt="">
-                                <hr>
+                                    <hr>
                                 </div>
                                 <div class="form-group">
                                     <label for="">Email address</label>
-                                    <input type="email" class="form-control" name="email" 
-                                        aria-describedby="emailHelp" placeholder="Enter email">
+                                    <input type="email" class="form-control" name="email" aria-describedby="emailHelp"
+                                        placeholder="Enter email">
                                 </div>
                                 <div class="form-group">
                                     <label for="">Password</label>
-                                    <input type="password" name="password" class="form-control" 
-                                        placeholder="Password">
+                                    <input type="password" name="password" class="form-control" placeholder="Password">
                                 </div>
                                 <div class="form-group text-right">
-                                    <p class="text-center">Belum punya akun ?  <a class="modal-register" type="button"> <i class="fa fa-user"></i> Register</a></p>
+                                    <p class="text-center">Belum punya akun ? <a class="modal-register" type="button">
+                                            <i class="fa fa-user"></i> Register</a></p>
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
                                     <button type="submit" class="btn btn-primary">Login</button>
-                                  
+
                                 </div>
-                                </form>
+                            </form>
                         </div>
 
                     </div>
@@ -295,36 +294,39 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-sm-12" style="padding-left: 32px;padding-right: 32px;padding-top: 25px;">
-                        <form method="POST" action="{{ route('register') }}">
+                            <form method="POST" action="{{ route('register') }}">
                                 @csrf
                                 <div class="form-group text-center">
                                     <img style="max-width: 70%;" src="{{ asset('assetFront/img/logo.png') }}" alt="">
-                                <hr>
+                                    <hr>
                                 </div>
                                 <div class="form-group">
                                     <label for="">Nama Lengkap</label>
-                                    <input type="text" class="form-control" name="name" 
-                                        aria-describedby="emailHelp" placeholder="Nama Lengkap">
+                                    <input type="text" class="form-control" name="name" aria-describedby="emailHelp"
+                                        placeholder="Nama Lengkap">
                                 </div>
                                 <div class="form-group">
                                     <label for="">Alamat Email</label>
-                                    <input type="email" class="form-control" name="email" 
-                                        aria-describedby="emailHelp" placeholder="Alamat email">
+                                    <input type="email" class="form-control" name="email" aria-describedby="emailHelp"
+                                        placeholder="Alamat email">
                                 </div>
                                 <div class="form-group">
                                     <label for="">Password</label>
-                                    <input type="password" name="password" class="form-control" 
-                                        placeholder="Password">
+                                    <input type="password" name="password" class="form-control" placeholder="Password">
                                 </div>
                                 <div class="form-group">
                                     <label for="">Confirm Password</label>
-                                    <input placeholder="Confirm Password" type="password" id="password-confirm" class="form-control" name="password_confirmation" required autocomplete="new-password" />
+                                    <input placeholder="Confirm Password" type="password" id="password-confirm"
+                                        class="form-control" name="password_confirmation" required
+                                        autocomplete="new-password" />
                                 </div>
                                 <div class="form-group text-right">
-                                    <p class="text-center">Daftar sebagai penjual ?  <a href="{{ url('register/supplier') }}"> <i class="fa fa-user"></i> Register</a></p>
+                                    <p class="text-center">Daftar sebagai penjual ? <a
+                                            href="{{ url('register/supplier') }}"> <i class="fa fa-user"></i>
+                                            Register</a></p>
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
                                     <button type="submit" class="btn btn-primary">Daftar</button>
-                                  
+
                                 </div>
                             </form>
                         </div>
@@ -416,7 +418,7 @@
     <!-- Js Plugins -->
     <script src="{{ asset('assetFront/js/jquery-3.3.1.min.js') }}"></script>
     <script src="{{ asset('assetFront/js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('assetFront/js/jquery.nice-select.min.js') }}"></script>
+    <!-- <script src="{{ asset('assetFront/js/jquery.nice-select.min.js') }}"></script> -->
     <script src="{{ asset('assetFront/js/jquery-ui.min.js') }}"></script>
     <script src="{{ asset('assetFront/js/jquery.slicknav.js') }}"></script>
     <script src="{{ asset('assetFront/js/mixitup.min.js') }}"></script>
@@ -436,6 +438,8 @@
     <script src="{{ asset('assetAdmin/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
     <script src="{{ asset('assetAdmin/js/fileinput.min.js') }}"></script>
     <script src="{{ asset('assetAdmin/js/toastr.min.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+    <script src="{{ asset('inputmask/inputmask.bundle.js') }}"></script>
     <script>
         $(document).ready(function () {
             $.ajaxSetup({
@@ -443,6 +447,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+
             $(document).on('click', '.header__menu ul li', function () {
                 localStorage.setItem("linkActive", $(this).attr('class'));
             })
@@ -453,12 +458,16 @@
                 $('.filter-nama-global').val(nama_search)
             }
 
-            $(document).on('click','.modal-register',function(){
+            $(document).on('click', '.modal-register', function () {
                 $('#modal-login').modal('hide');
                 $('#modal-register').modal('show');
             })
 
         })
+
+        function unmaskValue(element) {
+            return parseFloat(element.inputmask('unmaskedvalue') || 0)
+        }
 
         function renderRp(nilai, decimal) {
             return accounting.formatNumber(nilai, decimal, " ");
@@ -482,7 +491,7 @@
         var id_user = $('meta[name="id_user"]').attr('content');
 
     </script>
- @toastr_render
+    @toastr_render
     @yield('js')
 
 

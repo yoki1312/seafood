@@ -15,7 +15,8 @@ use App\Http\Controllers\SettingAkunSupplierController;
 use App\Http\Controllers\DaftarPembeliController; 
 use App\Http\Controllers\UserController; 
 use App\Http\Controllers\LaporanPenjualanController; 
-use App\Http\Controllers\GambarDashboardController; 
+use App\Http\Controllers\GambarDashboardController;
+use App\Http\Controllers\SettingPengirimanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -78,6 +79,7 @@ Route::post('add/item/komentar',[BackEndPesananController::class,'komentarProduk
 Route::post('get/item/komentar/{id_barang}',[BackEndPesananController::class,'getkomentarProduk']);
 Route::post('hapus/item/komentar/{id_komentar}',[BackEndPesananController::class,'hapuskomentarProduk']);
 Route::get('detail/barang/{id}',[BackEndPesananController::class,'detailBarang']);
+Route::post('hitungOngkir',[BackEndPesananController::class,'hitungOngkir']);
 
 
 Route::controller(PesananController::class)->group(function(){
@@ -115,6 +117,20 @@ Route::controller(SupplierAuthController::class)->group(function(){
     Route::get('akunSupplier/detail/{id_supplier}', 'show')->name('akunSupplier.show');
     Route::get('akunSupplier/destroy/{id_supplier}', 'destroy')->name('akunSupplier.destroy');
     Route::post('akunSupplier/update', 'update')->name('akunSupplier.update');
+
+});
+Route::controller(SettingPengirimanController::class)->group(function(){
+ 
+    Route::get('setting-pengiriman', 'index')->name('setting-pengiriman.index');
+    Route::post('ref_kabupaten', 'ref_kabupaten')->name('setting-pengiriman.ref_kabupaten');
+    Route::post('ref_kecamatan', 'ref_kecamatan')->name('setting-pengiriman.ref_kecamatan');
+    Route::post('ref_desa', 'ref_desa')->name('setting-pengiriman.ref_desa');
+    Route::get('setting-pengiriman/aktif/{id_supplier}', 'aktif')->name('setting-pengiriman.aktif');
+    Route::get('setting-pengiriman/nonaktif/{id_supplier}', 'nonaktif')->name('setting-pengiriman.nonaktif');
+    Route::get('setting-pengiriman/edit/{id_supplier}', 'edit')->name('setting-pengiriman.edit');
+    Route::get('setting-pengiriman/detail/{id_supplier}', 'show')->name('setting-pengiriman.show');
+    Route::get('setting-pengiriman/destroy/{id_supplier}', 'destroy')->name('setting-pengiriman.destroy');
+    Route::post('setting-pengiriman/store', 'store')->name('setting-pengiriman.store');
 
 });
 

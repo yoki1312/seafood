@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Facades\DB;
+
 function sliderKategori(){
     return \DB::table('master_kategori_seafood')->get();
 }
@@ -61,4 +63,9 @@ function dataDashboard() {
   $k->total_transaksi = DB::table('data_transaksi')->count();
   $k->total_barang = DB::table('master_barang')->count();
   return $k;
+}
+
+function setPengiriman(){ 
+  $data = DB::table('setting_pengiriman as ta')->first();  
+  return $data;
 }

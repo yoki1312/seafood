@@ -36,7 +36,7 @@
                         </div>
                         <div class="col-sm-6 form-group">
                             <label>Harga Barang</label>
-                            <input type="text" name="harga_barang" class="form-control form-control-sm  text-right">
+                            <input type="text" name="harga_barang" data-inputmask="'alias': 'currency', 'prefix': '','digits': '2'"  class="form-control form-control-sm  text-right input-mask">
                         </div>
                         <div class="col-sm-3 form-group">
                             <label>Satuan Barang</label>

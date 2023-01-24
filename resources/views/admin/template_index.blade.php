@@ -38,6 +38,8 @@
     <link rel="stylesheet" href="{{ asset('assetAdmin/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assetAdmin/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
     <script src="//js.pusher.com/3.1/pusher.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" />
+    
     <script type="text/javascript">
         
         var pusher = new Pusher('103515b1ffc110198444', {
@@ -271,6 +273,12 @@
                                     <a href="{{ route('gambarDahsboard.index') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Dashboard</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('setting-pengiriman.index') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Pengiriman</p>
                                     </a>
                                 </li>
                             </ul>
@@ -743,7 +751,8 @@
     <script src="{{ asset('assetAdmin/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
     <script src="{{ asset('assetAdmin/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
     <script src="{{ asset('accounting.min.js') }}"></script>
-  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+    <script src="{{ asset('inputmask/inputmask.bundle.js') }}"></script>
     <script>
         var _url =  $('meta[name="url"]').attr('content')
         $(document).ready(function () {
@@ -753,6 +762,12 @@
                 }
             });
             notif();
+            $(".input-mask").inputmask({
+                removeMaskOnSubmit: true,
+                allowMinus: false
+            }).on('focus', function () {
+                $(this).select();
+            });
         })
         function renderRp(nilai, decimal) {
             return accounting.formatNumber(nilai, decimal, " ");
