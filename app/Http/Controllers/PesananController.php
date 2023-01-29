@@ -225,9 +225,8 @@ class PesananController extends Controller
 
         DB::table('data_transaksi')->where('id_transaksi', $request->id_transaksi)->update([
             'nama' => $request->nama_depan .' '. $request->nama_belakang,
-            'kota' => $request->kota,
-            'email' => $request->email,
-            'alamat_lengkap' => $request->alamat_lengkap,
+            'kota' => '',
+            'email' => Auth::user()->email, 
             'catatan' => $request->catatan,
             'nomor_hp' => $request->nomor_hp,
             'file'  => $fileName
