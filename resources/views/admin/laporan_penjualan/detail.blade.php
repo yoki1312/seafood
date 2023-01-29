@@ -58,8 +58,7 @@
                         <br>
                         <b>Status Transaksi:</b> {{ $header->nama_status }}<br>
                         <b>Catatan Pembeli:</b> {{ $data_transaksi->catatan }}<br>
-                        <b>File Pembayaran:</b> <a target="_blank"
-                            href={{ asset('file-pembayaran/'.$data_transaksi->file)}}>Lihat File Pembayaran</a>
+                        <b>File Pembayaran:</b> <a target="_blank" download href={{ asset("file-pembayaran/".$data_transaksi->file) }}>Lihat File Pembayaran</a>
                     </div>
                     <!-- /.col -->
                 </div>
